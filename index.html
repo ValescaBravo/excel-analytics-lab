@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excel Analytics Lab — Valesca Bravo 2026</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = { theme: { extend: { colors: {
+      navy: { DEFAULT:'#1d085e', light:'#2d1278', dark:'#130440' },
+      teal: { DEFAULT:'#13d6c1', dark:'#0a9a88', light:'#3de8d6' }
+    }}}}
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Sora',sans-serif;background:#09071a;color:#e8e6f0;line-height:1.6;min-height:100vh}
+
+    /* ── SYNTAX ── */
+    .code-block{background:#141428;border-radius:10px;padding:.9rem 1.1rem;font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.85;overflow-x:auto;border:1px solid #1e1e38;white-space:pre}
+    .xl-fn{color:#4ec9b0;font-weight:600}
+    .xl-str{color:#ce9178}
+    .xl-cmt{color:#6a9955;font-style:italic}
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:#110e2e}
+    ::-webkit-scrollbar-thumb{background:#13d6c1;border-radius:3px}
+    .tab-scroll{overflow-x:auto;scrollbar-width:thin}
+    .tab-scroll::-webkit-scrollbar{height:3px}
+
+    /* ── ANIMATION ── */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .fade-up{animation:fadeUp .28s ease forwards}
+
+    /* ── RANGE ── */
+    input[type=range]{-webkit-appearance:none;height:4px;background:#221b56;border-radius:4px;outline:none;width:100%;cursor:pointer}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:#13d6c1;border-radius:50%}
+    input[type=range]::-moz-range-thumb{width:16px;height:16px;background:#13d6c1;border-radius:50%;border:none}
+
+    /* ── TABLE ── */
+    .dt{width:100%;border-collapse:collapse;font-size:.77rem}
+    .dt th{background:#1d085e;color:#13d6c1;padding:.42rem .7rem;text-align:left;font-weight:600;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase}
+    .dt td{padding:.38rem .7rem;border-bottom:1px solid #1a1542;font-family:'DM Mono',monospace}
+    .dt tr:hover td{background:#140f38}
+
+    /* ── CARDS ── */
+    .card{background:#110e2e;border:1px solid #1e1b46;border-radius:12px;padding:1.1rem 1.15rem;transition:border-color .2s}
+    .card:hover{border-color:rgba(19,214,193,.25)}
+    .analogy-box{background:linear-gradient(135deg,rgba(29,8,94,.55),rgba(10,154,136,.12));border-left:3px solid #13d6c1;border-radius:0 8px 8px 0;padding:.7rem .95rem;font-size:.84rem;line-height:1.65;margin-bottom:.85rem}
+    .error-box{background:rgba(239,68,68,.07);border-left:3px solid #ef4444;border-radius:0 8px 8px 0;padding:.6rem .9rem;font-size:.82rem;color:#fca5a5;line-height:1.6}
+    .tip-box{background:rgba(16,185,129,.07);border-left:3px solid #10b981;border-radius:0 8px 8px 0;padding:.6rem .9rem;font-size:.82rem;color:#6ee7b7;line-height:1.6}
+    .result-badge{display:inline-flex;align-items:center;gap:.35rem;background:rgba(10,154,136,.15);border:1px solid rgba(19,214,193,.3);border-radius:6px;padding:.22rem .6rem;font-family:'DM Mono',monospace;font-size:.77rem;color:#13d6c1}
+
+    /* ── QUIZ ── */
+    .qopt{background:#140f38;border:1px solid #1e1b46;border-radius:8px;padding:.58rem .85rem;cursor:pointer;transition:all .17s;font-size:.83rem;text-align:left;width:100%;color:#e8e6f0;font-family:'Sora',sans-serif}
+    .qopt:hover:not(:disabled){border-color:#13d6c1;background:#1e1b46}
+    .qopt.correct{border-color:#10b981;background:rgba(16,185,129,.12);color:#10b981}
+    .qopt.wrong{border-color:#ef4444;background:rgba(239,68,68,.1);color:#ef4444}
+
+    /* ── BUTTONS ── */
+    .btn-ghost{background:transparent;border:1px solid #1e1b46;border-radius:6px;padding:.46rem .88rem;color:#8b86a8;cursor:pointer;font-size:.79rem;font-family:'Sora',sans-serif;transition:all .17s}
+    .btn-ghost:hover:not(:disabled){border-color:#13d6c1;color:#e8e6f0}
+    .btn-ghost:disabled{opacity:.35;cursor:not-allowed}
+    .btn-primary{background:#13d6c1;color:#09071a;border:none;border-radius:6px;padding:.46rem .88rem;font-weight:700;font-size:.79rem;font-family:'Sora',sans-serif;cursor:pointer;transition:opacity .15s}
+    .btn-primary:hover{opacity:.88}
+    .btn-primary:disabled{background:#1e1b46;color:#3a3660;cursor:not-allowed;opacity:1}
+
+    /* ── STEP PILL ── */
+    .step-pill{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:#1d085e;border:1px solid rgba(19,214,193,.4);border-radius:50%;font-size:.71rem;font-weight:700;color:#13d6c1;flex-shrink:0;font-family:'DM Mono',monospace}
+
+    /* ── CHEAT SHEET CARD ── */
+    .cs-card{background:#110e2e;border:1px solid #1e1b46;border-radius:8px;padding:.82rem;transition:border-color .2s,transform .18s}
+    .cs-card:hover{border-color:rgba(19,214,193,.38);transform:translateY(-2px)}
+    .cs-fn{color:#4ec9b0;font-family:'DM Mono',monospace;font-size:.81rem;font-weight:600}
+    .cs-ex{font-family:'DM Mono',monospace;font-size:.7rem;color:#504d70;margin-top:.28rem}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+/* ═══════════════════════════════════════════════
+   SYNTAX HIGHLIGHTER
+═══════════════════════════════════════════════ */
+const XL_FNS = 'XLOOKUP|SORTBY|UNIQUE|FILTER|SORT|INDEX|MATCH|IFERROR|IFNA|IFS|SUMIFS|SUMIF|COUNTIFS|COUNTIF|AVERAGEIFS|AVERAGEIF|SUMPRODUCT|OFFSET|INDIRECT|TEXTJOIN|CONCAT|TEXT|TRIM|VALUE|ISNUMBER|ISTEXT|ISBLANK|ISERROR|FORECAST\\.LINEAR|NORM\\.DIST|NORM\\.INV|PERCENTILE\\.INC|PERCENTILE\\.EXC|PERCENTRANK\\.INC|QUARTILE\\.INC|STDEV\\.S|STDEV\\.P|RANK\\.EQ|CORREL|LINEST|SLOPE|INTERCEPT|RSQ|MAKEARRAY|SEQUENCE|LAMBDA|TAKE|CHOOSECOLS|EOMONTH|NETWORKDAYS|AVERAGE|MEDIAN|COUNTA|COUNT|MAXIFS|MINIFS|LARGE|SMALL|ROUNDUP|ROUNDDOWN|ROUND|POWER|TODAY|YEAR|MONTH|DATE|DAY|LEFT|RIGHT|MID|LEN|UPPER|LOWER|IF|OR|AND|NOT|SUM|MAX|MIN|ABS|INT|MOD|LET|VLOOKUP|HLOOKUP|CHOOSE|COVARIANCE\\.S';
+const FRX = new RegExp(`(${XL_FNS})(?=\\s*\\()`, 'g');
+function xlH(raw) {
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return raw.split('\n').map(line => {
+    const el = esc(line);
+    if (el.trim().startsWith('//')) return `<span class="xl-cmt">${el}</span>`;
+    const ci = el.indexOf('//');
+    let code = ci >= 0 ? el.slice(0,ci) : el;
+    const cmt  = ci >= 0 ? `<span class="xl-cmt">${el.slice(ci)}</span>` : '';
+    code = code.replace(/"([^"]*)"/g,'<span class="xl-str">"$1"</span>');
+    code = code.replace(FRX,'<span class="xl-fn">$1</span>');
+    return code + cmt;
+  }).join('\n');
+}
+
+/* ═══════════════════════════════════════════════
+   SHARED UI COMPONENTS
+═══════════════════════════════════════════════ */
+function Badge({ text, color='teal' }) {
+  const C = {
+    teal:  {bg:'rgba(19,214,193,.12)',bd:'rgba(19,214,193,.3)',tx:'#13d6c1'},
+    navy:  {bg:'rgba(29,8,94,.45)',   bd:'rgba(157,143,245,.25)',tx:'#9d8ff5'},
+    green: {bg:'rgba(16,185,129,.12)',bd:'rgba(16,185,129,.3)',  tx:'#10b981'},
+    orange:{bg:'rgba(251,146,60,.12)',bd:'rgba(251,146,60,.3)',  tx:'#fb923c'},
+    red:   {bg:'rgba(239,68,68,.1)', bd:'rgba(239,68,68,.3)',   tx:'#ef4444'},
+    yellow:{bg:'rgba(234,179,8,.1)', bd:'rgba(234,179,8,.3)',   tx:'#eab308'},
+  }[color]||{};
+  return <span style={{background:C.bg,border:`1px solid ${C.bd}`,color:C.tx,borderRadius:'4px',padding:'.1rem .42rem',fontSize:'.67rem',fontWeight:700,letterSpacing:'.05em',textTransform:'uppercase',fontFamily:'DM Mono, monospace',whiteSpace:'nowrap'}}>{text}</span>;
+}
+
+function SH2({ title, sub }) {
+  return (
+    <div style={{marginBottom:'1.2rem'}}>
+      <h2 style={{fontSize:'1.15rem',fontWeight:700,color:'#e8e6f0',marginBottom:'.18rem'}}>{title}</h2>
+      {sub && <p style={{color:'#8b86a8',fontSize:'.81rem'}}>{sub}</p>}
+    </div>
+  );
+}
+
+function Code({ code, label }) {
+  return (
+    <div>
+      {label && <div style={{color:'#504d70',fontSize:'.66rem',textTransform:'uppercase',letterSpacing:'.09em',marginBottom:'.28rem',fontFamily:'DM Mono, monospace'}}>{label}</div>}
+      <div className="code-block" dangerouslySetInnerHTML={{__html: xlH(code)}} />
+    </div>
+  );
+}
+
+function DT({ headers, rows, result }) {
+  return (
+    <div>
+      <div style={{overflowX:'auto',borderRadius:'8px',border:'1px solid #1e1b46'}}>
+        <table className="dt">
+          <thead><tr>{headers.map(h=><th key={h}>{h}</th>)}</tr></thead>
+          <tbody>{rows.map((r,i)=><tr key={i}>{r.map((c,j)=><td key={j}>{c}</td>)}</tr>)}</tbody>
+        </table>
+      </div>
+      {result && <div style={{marginTop:'.45rem'}}><span className="result-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>{result}</span></div>}
+    </div>
+  );
+}
+
+function Analogy({ icon='🎯', text }) {
+  return <div className="analogy-box"><span style={{marginRight:'.4rem'}}>{icon}</span>{text}</div>;
+}
+function Err({ text }) {
+  return <div className="error-box" style={{marginTop:'.6rem'}}><strong style={{marginRight:'.4rem'}}>⚠ Error común:</strong>{text}</div>;
+}
+function Tip({ text }) {
+  return <div className="tip-box" style={{marginTop:'.6rem'}}><strong style={{marginRight:'.4rem'}}>✓ Tip:</strong>{text}</div>;
+}
+
+/* FormulaCard — renders one formula block from a data object */
+function FormulaCard({ d }) {
+  const dc = {teal:'teal',esencial:'teal',intermedio:'orange',avanzado:'red',m365:'yellow',fechas:'navy',interactividad:'teal',segmentación:'green'}[(d.diff||'').toLowerCase()]||'teal';
+  return (
+    <div className="card" style={{marginBottom:'1.5rem'}}>
+      <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
+        <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>{d.name}</h3>
+        {d.tag && <span style={{color:'#8b86a8',fontSize:'.77rem'}}>{d.tag}</span>}
+        <div style={{marginLeft:'auto'}}>{d.diff && <Badge text={d.diff} color={dc}/>}</div>
+      </div>
+      <Analogy icon={d.icon} text={d.analogy}/>
+      <div style={{marginBottom:'.82rem'}}><Code code={d.code} label="Sintaxis y ejemplo"/></div>
+      {d.table && <div style={{marginBottom:'.82rem'}}><DT {...d.table}/></div>}
+      {d.error && <Err text={d.error}/>}
+      {d.tip   && <Tip text={d.tip}/>}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   TAB CONTENT PLACEHOLDERS (filled per phase)
+═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   PHASE 2 — FOUNDATIONS · LOOKUP · STATS
+═══════════════════════════════════════════════ */
+
+/* ── TAB 1: FOUNDATIONS ── */
+const FOUND_FORMULAS = [
+  {
+    name:'Tablas estructuradas',tag:'Ctrl+T — la base de todo',diff:'Fundamental',icon:'🗃️',
+    analogy:'Una tabla estructurada es como una base de datos local en Excel. A diferencia de un rango, tiene nombre propio, encabezados fijos y se expande sola cuando agregas filas. Las fórmulas que la referencian se actualizan automáticamente.',
+    code:`// Convertir rango a tabla: Ctrl+T → asignar nombre descriptivo
+// Referencias estructuradas:
+=SUM(Ventas[Revenue])              // suma toda la columna
+=COUNTIF(Campanas[Status],"Won")   // filtra por condición
+=AVERAGE(Campanas[ROAS])           // promedio sin fijar rango
+
+// La referencia Campanas[ROAS] se expande con los datos.
+// Un rango fijo como C2:C100 NO lo hace.`,
+    table:{
+      headers:['Rango normal','Tabla estructurada'],
+      rows:[
+        ['=SUM(B2:B100) — se rompe al agregar filas','=SUM(Ventas[Revenue]) — auto-expandible'],
+        ['Referencias opacas ($C$2:$C$200)','Nombres descriptivos en las fórmulas'],
+        ['Ordenar puede romper otras fórmulas','Integración nativa con Power Query y pivots'],
+      ]
+    },
+    tip:'Ctrl+T desde cualquier rango. Nombra la tabla en Diseño > Nombre de tabla. Nunca dejes el nombre genérico Tabla1.'
+  },
+  {
+    name:'Nombres de rango',tag:'Legibilidad y mantenibilidad',diff:'Esencial',icon:'📖',
+    analogy:'Un nombre de rango es como guardar un contacto en el teléfono: en vez de marcar +353-01-234-5678 escribes "Oficina". En Excel, en vez de $C$2:$C$500 escribes Presupuesto. Las fórmulas se vuelven legibles para cualquier persona del equipo.',
+    code:`// Definir: Fórmulas > Administrador de nombres
+// O: seleccionar rango → escribir nombre en el Cuadro de nombres
+
+// Sin nombre (opaco):
+=SUMIF($A$2:$A$500,"Q1",$C$2:$C$500)
+
+// Con nombre (legible):
+=SUMIF(Trimestre,"Q1",Presupuesto)
+
+// Nombre dinámico con OFFSET (crece con los datos):
+=OFFSET(Sheet1!$A$1, 0, 0, COUNTA(Sheet1!$A:$A), 1)`,
+    error:'No uses espacios ni caracteres especiales. Usa_guiones_bajos o CamelCase. Los nombres son globales por defecto — en archivos con múltiples hojas similares pueden colisionar.'
+  },
+  {
+    name:'Tipos de datos y el error silencioso',tag:'El diagnóstico previo',diff:'Diagnóstico',icon:'🔢',
+    analogy:'Cuando importas un CSV, los números suelen llegar como texto. Tu SUM devuelve 0, tu ordenamiento es alfabético en vez de numérico y nadie sabe por qué el reporte está mal. Es el error más común y más invisible en análisis corporativo.',
+    code:`// Detectar texto disfrazado de número:
+=ISNUMBER(A2)          // FALSE = es texto aunque se vea como número
+=LEN(TRIM(A2))<>LEN(A2) // TRUE = hay espacios ocultos
+
+// Convertir texto a número:
+=VALUE(TRIM(A2))       // TRIM elimina espacios, VALUE convierte
+=A2*1                  // multiplicar por 1 fuerza la conversión
+=--A2                  // doble negación — equivalente compacto
+
+// Las fechas reales son números seriales en Excel:
+// 1 ene 1900 = 1 / abr 2026 ≈ 45773
+=ISNUMBER(A2)          // una fecha real devuelve TRUE`,
+    table:{
+      headers:['Valor visible','Tipo real','SUM','SORT'],
+      rows:[
+        ['"100" (texto)','Texto','0','100 antes que 20 (alfabético)'],
+        ['100 (número)','Número','100','Correcto (numérico)'],
+        ['"2026-04-25" (texto)','Texto','Error en date math','Orden lexicográfico'],
+        ['45773 (serial)','Fecha/Número','45773','Cronológico correcto'],
+      ]
+    }
+  },
+  {
+    name:'Reglas de higiene de datos',tag:'Lo que rompe silenciosamente el análisis',diff:'Crítico',icon:'🚫',
+    analogy:'Mezclar datos con formato es como escribir tus contratos en el mismo papel que las notas de reunión. Parece eficiente hasta que alguien ejecuta un FILTER o una tabla dinámica — y entonces todo colapsa.',
+    code:`// Las celdas combinadas son el enemigo del análisis:
+// → Rompen FILTER, tablas dinámicas y Power Query
+// → Solución: usar una columna de categoría separada
+
+// Filas o columnas vacías dentro del dataset:
+// → Excel asume que la tabla termina ahí
+// → Solución: usar "Sin dato" o N/A como valor explícito
+
+// Totales mezclados con datos en la misma columna:
+// → Se suman a sí mismos en agregaciones
+// → Solución: calcular totales en celdas de resumen separadas
+
+// Colores como única señal de categoría:
+// → Fórmulas y Power Query no leen formato, solo valores
+// → Solución: agregar columna de texto con la categoría`,
+    table:{
+      headers:['Nunca hacer','Alternativa'],
+      rows:[
+        ['Celdas combinadas en datasets','Columna de categoría separada'],
+        ['Filas/columnas vacías en medio del rango','Usar "Sin dato" como valor explícito'],
+        ['Totales dentro del mismo dataset','Celdas de resumen fuera de la tabla'],
+        ['Colores como única categorización','Columna de texto con el valor'],
+        ['Comentarios en celdas de datos','Columna "Notas" al dataset'],
+      ]
+    }
+  },
+];
+
+function FoundationsTab() {
+  return (
+    <div className="fade-up">
+      <SH2 title="Fundamentos analíticos" sub="Antes de cualquier fórmula, la estructura de los datos lo determina todo."/>
+      {FOUND_FORMULAS.map(d => <FormulaCard key={d.name} d={d}/>)}
+
+      <SH2 title="¿Cuándo usar Excel, Python o Power BI?" sub="Criterios objetivos — sin fanáticos de ninguna herramienta."/>
+      <div style={{overflowX:'auto',borderRadius:'12px',border:'1px solid #1e1b46',marginBottom:'1.25rem'}}>
+        <table style={{width:'100%',borderCollapse:'collapse',fontSize:'.77rem'}}>
+          <thead>
+            <tr style={{background:'#0d0b22'}}>
+              {['Criterio','📊 Excel','🐍 Python','⚡ Power BI'].map((h,i)=>(
+                <th key={h} style={{padding:'.58rem .82rem',textAlign:i===0?'left':'center',color:['#8b86a8','#4ec9b0','#dcdcaa','#fb923c'][i],fontSize:'.68rem',letterSpacing:'.07em',textTransform:'uppercase',fontWeight:700}}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ['Volumen de datos','< 500K filas','Sin límite práctico','< 1B filas (modelo)'],
+              ['Audiencia','Cualquier usuario','Devs / analistas','Usuarios de negocio'],
+              ['Automatización','Limitada (VBA)','Total (CI/CD, APIs)','Moderada (refresh)'],
+              ['Código requerido','No','Sí','Mínimo (M y DAX)'],
+              ['Curva de aprendizaje','Baja','Alta','Media'],
+              ['Colaboración','OneDrive / SharePoint','Git / GitHub','Power BI Service'],
+              ['Costo','Incluido en M365','Gratuito','~$10/usuario/mes'],
+              ['Exploración ad-hoc','★★★★★','★★★☆☆','★★★☆☆'],
+              ['Dashboards interactivos','★★☆☆☆','★★★☆☆','★★★★★'],
+              ['Machine Learning','★☆☆☆☆','★★★★★','★★☆☆☆'],
+            ].map(([criterio,...vals],i)=>(
+              <tr key={criterio} style={{background:i%2===0?'transparent':'rgba(29,8,94,.07)'}}>
+                <td style={{padding:'.42rem .82rem',color:'#c4c0d8',fontFamily:'DM Mono, monospace',borderBottom:'1px solid #1a1542'}}>{criterio}</td>
+                {vals.map((v,j)=>(
+                  <td key={j} style={{padding:'.42rem .82rem',textAlign:'center',color:['#4ec9b0','#dcdcaa','#fb923c'][j],fontFamily:'DM Mono, monospace',fontSize:'.75rem',borderBottom:'1px solid #1a1542'}}>{v}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(215px,1fr))',gap:'1rem'}}>
+        {[
+          {color:'#4ec9b0',title:'Usa Excel cuando…',items:['Datos < 500K filas','Audiencia sin herramientas especiales','Análisis ad-hoc o frecuencia semanal','Solo tienes acceso a M365']},
+          {color:'#dcdcaa',title:'Usa Python cuando…',items:['Automatización total o APIs','Datos > 1M filas','Machine learning o estadística avanzada','El output es un sistema, no un reporte']},
+          {color:'#fb923c',title:'Usa Power BI cuando…',items:['Múltiples fuentes que se actualizan solas','KPIs estandarizados con drill-down','Audiencia amplia sin habilidades técnicas','Presupuesto para licencias Pro']},
+        ].map(({color,title,items})=>(
+          <div key={title} className="card" style={{borderColor:`${color}33`}}>
+            <h4 style={{color,fontWeight:700,fontSize:'.83rem',marginBottom:'.6rem'}}>{title}</h4>
+            {items.map(it=>(
+              <div key={it} style={{display:'flex',gap:'.45rem',marginBottom:'.28rem',fontSize:'.78rem',color:'#c4c0d8'}}>
+                <span style={{color,flexShrink:0}}>›</span>{it}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── TAB 2: LOOKUP ── */
+const LOOKUP_DATA = [
+  {
+    name:'XLOOKUP',tag:'El sucesor moderno de VLOOKUP',diff:'Esencial',icon:'🔍',
+    analogy:'XLOOKUP es como la búsqueda de Google para tus tablas: le das lo que buscas, dónde buscar y qué devolver. Y puedes decirle exactamente qué mostrar cuando no encuentra nada. Sin restricciones de columnas, busca en cualquier dirección.',
+    code:`// Buscar email de cliente por su ID:
+=XLOOKUP(B2, Clientes[ID], Clientes[Email], "No encontrado")
+
+// Devolver múltiples columnas a la vez:
+=XLOOKUP(B2, Clientes[ID], Clientes[[Nombre]:[Email]:[Segmento]])
+
+// Buscar el registro MÁS RECIENTE (search_mode=-1):
+=XLOOKUP(B2, Pedidos[Cliente], Pedidos[Fecha], , 0, -1)
+
+// Argumentos: lookup_value, lookup_array, return_array,
+//             [if_not_found], [match_mode], [search_mode]`,
+    table:{headers:['ID_Cliente','Nombre','Email','Segmento'],rows:[['C001','Ana Martínez','ana@brand.ie','Premium'],['C002','Luis García','luis@brand.ie','Standard'],['C003','Sara López','sara@brand.ie','Premium']],result:'XLOOKUP("C002", ID, Email) → luis@brand.ie'},
+    error:'No requiere que la columna de búsqueda sea la primera — VLOOKUP sí lo exige. Si sigues usando VLOOKUP en 2026, es el momento de migrar.',
+    tip:'match_mode=-1 busca el valor igual o inferior más grande — útil para tablas de descuento por tramos. match_mode=0 (exacto) es el default.'
+  },
+  {
+    name:'INDEX + MATCH',tag:'La combinación clásica — compatible con todas las versiones',diff:'Esencial',icon:'📚',
+    analogy:'MATCH es como el índice de un libro: te dice en qué página está lo que buscas. INDEX va directamente a esa página y trae el valor. Juntos funcionan en cualquier dirección y en cualquier versión de Excel.',
+    code:`// Encontrar revenue de "Email" en la fila Q2 (lookup bidireccional):
+=INDEX(B2:D4, MATCH("Q2",A2:A4,0), MATCH("Email",B1:D1,0))
+
+// Lookup vertical estándar:
+=INDEX(Campanas[Revenue], MATCH(G2, Campanas[Canal], 0))
+
+// Dos criterios simultáneos (M365 — sin Ctrl+Shift+Enter):
+=INDEX(Ventas[Monto],
+  MATCH(1, (Ventas[Region]=H2)*(Ventas[Mes]=H3), 0)
+)`,
+    table:{headers:['Quarter','Email','Social','Paid Search'],rows:[['Q1','€45,200','€38,100','€52,800'],['Q2','€58,400','€41,200','€61,500'],['Q3','€51,100','€44,800','€55,200']],result:'INDEX(B2:D4, MATCH("Q2",A2:A4,0), MATCH("Email",B1:D1,0)) → €58,400'},
+    error:'El tercer argumento de MATCH debe ser 0 (exacto) casi siempre. El default es 1 (rango ordenado ascendente) — produce resultados silenciosamente incorrectos si los datos no están ordenados.'
+  },
+  {
+    name:'FILTER',tag:'Filtrado dinámico que derrama una tabla completa',diff:'M365',icon:'🎚️',
+    analogy:'FILTER devuelve una tabla con solo las filas que cumplen tu condición. Los resultados se actualizan solos si cambian los datos. No es un filtro de vista — es una fórmula que construye una nueva tabla en tiempo real.',
+    code:`// Campañas con ROAS mayor a 3:
+=FILTER(Campanas, Campanas[ROAS]>3, "Sin resultados")
+
+// Múltiples condiciones: * es AND, + es OR
+=FILTER(Campanas,
+  (Campanas[Canal]="Social") * (Campanas[ROAS]>2.5)
+)
+
+// Ordenar el resultado con SORT:
+=SORT(FILTER(Campanas, Campanas[Status]="Active"), 3, -1)`,
+    table:{headers:['Campaña','Canal','ROAS','¿Pasa?'],rows:[['Summer Sale','Social','4.2','Sí'],['Brand Awareness','Display','1.8','No'],['Retargeting','Paid Search','5.1','Sí'],['Newsletter Q2','Email','3.7','Sí']],result:'FILTER devuelve: Summer Sale · Retargeting · Newsletter Q2'},
+    error:'Requiere Microsoft 365 o Excel 2021+. Las celdas donde derrama deben estar vacías — si hay datos, aparece el error #SPILL!.'
+  },
+  {
+    name:'UNIQUE',tag:'Lista sin duplicados — dinámica y auto-actualizable',diff:'M365',icon:'🎟️',
+    analogy:'Como la lista VIP de un evento: no importa cuántas veces aparezca el mismo nombre en el sistema, en la lista final sale una sola vez. Y si agregas registros nuevos, la lista se actualiza sola.',
+    code:`// Lista única de canales activos:
+=UNIQUE(Campanas[Canal])
+
+// Combinaciones únicas de dos columnas:
+=UNIQUE(Campanas[[Canal]:[Segmento]])
+
+// Solo valores que aparecen exactamente una vez:
+=UNIQUE(Campanas[Canal], FALSE, TRUE)
+
+// Lista ordenada de valores únicos:
+=SORT(UNIQUE(Campanas[Canal]))`,
+    table:{headers:['Canal (fuente con duplicados)','→ UNIQUE devuelve'],rows:[['Email','Email'],['Social','Social'],['Email','Paid Search'],['Paid Search','Display'],['Social',''],['Display','']],result:'4 valores únicos en lugar de 6 filas repetidas'},
+    error:'No coloques datos en las celdas debajo de donde escribes UNIQUE — derrama automáticamente hacia abajo. Si hay datos, aparece #SPILL!.'
+  },
+  {
+    name:'SORT / SORTBY',tag:'Ordenar resultados sin tocar los datos originales',diff:'M365',icon:'🏆',
+    analogy:'Como el ranking de clasificación de un torneo que se recalcula solo cuando cambian los resultados. SORT devuelve una copia ordenada — no modifica el dataset original.',
+    code:`// Campañas ordenadas por Revenue descendente:
+=SORT(Campanas[[Campana]:[Revenue]], 3, -1)
+
+// SORTBY: ordenar por una columna que no se muestra:
+=SORTBY(Campanas[[Campana]:[Canal]], Campanas[ROAS], -1)
+
+// Múltiples criterios:
+=SORTBY(Tabla, Col_Primaria, -1, Col_Secundaria, 1)
+
+// Top 5 campañas por ROAS:
+=TAKE(SORTBY(Campanas, Campanas[ROAS], -1), 5)`,
+    error:'sort_order: 1 = ascendente, -1 = descendente. SORTBY es más flexible que SORT cuando el criterio de orden es una columna diferente a las que muestras en el resultado.'
+  },
+];
+
+function LookupTab() {
+  return (
+    <div className="fade-up">
+      <SH2 title="Fórmulas de lookup" sub="Encontrar datos en otra tabla es el 70% del trabajo de un analista."/>
+      {LOOKUP_DATA.map(d => <FormulaCard key={d.name} d={d}/>)}
+    </div>
+  );
+}
+
+/* ── TAB 3: STATS ── */
+const STATS_DATA = [
+  {
+    name:'PERCENTILE.INC',tag:'Posición relativa dentro de la distribución',diff:'Esencial',icon:'📊',
+    analogy:'Si un cliente está en el percentil 90 de LTV, su valor de vida supera al 90% de tus clientes. Los percentiles indican posición relativa, no valor absoluto. Son más robustos que el promedio cuando hay valores extremos.',
+    code:`// Percentil 75 (Q3) del Lifetime Value:
+=PERCENTILE.INC(Clientes[LTV], 0.75)
+
+// Umbral del top 10% para segmentación premium:
+=PERCENTILE.INC(Clientes[LTV], 0.90)
+
+// ¿En qué percentil está un cliente específico?
+=PERCENTRANK.INC(Clientes[LTV], A2)   // devuelve 0 a 1
+
+// Rango intercuartílico (IQR = Q3 - Q1):
+=QUARTILE.INC(Clientes[LTV],3) - QUARTILE.INC(Clientes[LTV],1)`,
+    table:{headers:['Cliente','LTV (€)','Percentil'],rows:[['Ana M.','€2,800','P98'],['Luis G.','€1,200','P75'],['Sara L.','€580','P42'],['Pedro T.','€340','P21']],result:'PERCENTILE.INC a 0.75 → €1,190 (umbral del top 25%)'},
+    error:'PERCENTILE.INC incluye los extremos (k=0 y k=1 son válidos). PERCENTILE.EXC los excluye. Para análisis de negocio estándar, usa siempre .INC.'
+  },
+  {
+    name:'STDEV.S / STDEV.P',tag:'Medir la consistencia o volatilidad de tus métricas',diff:'Esencial',icon:'🎯',
+    analogy:'Si tu revenue semanal es €10K, €10.5K, €9.8K — la STDEV es pequeña y eres consistente. Si es €2K, €18K, €4K, €16K — la STDEV es grande y hay volatilidad. Es la distancia promedio de cada punto a la media.',
+    code:`// Desviación estándar del revenue (muestra):
+=STDEV.S(Ventas[Revenue])
+
+// Coeficiente de variación (variabilidad relativa — más interpretable):
+=STDEV.S(Ventas[Revenue]) / AVERAGE(Ventas[Revenue])
+
+// Z-score: ¿este mes es estadísticamente inusual?
+// Valores > 2 o < -2 son outliers estadísticos
+=(D2 - AVERAGE(Ventas[Revenue])) / STDEV.S(Ventas[Revenue])`,
+    table:{headers:['Semana','Revenue (€)','Z-score','Interpretación'],rows:[['S1','€12,400','0.32','Normal'],['S2','€11,800','-0.21','Normal'],['S3','€9,200','-1.65','Bajo pero normal'],['S4','€18,900','2.91','← Outlier estadístico'],['S5','€12,100','0.09','Normal']],result:'STDEV.S → €3,180 | Media → €12,880'},
+    error:'Usa STDEV.S cuando tienes una muestra (lo habitual). STDEV.P solo cuando tienes todos los datos de la población entera. Confundirlos sub-estima la variabilidad real.'
+  },
+  {
+    name:'CORREL',tag:'¿Dos variables se mueven juntas?',diff:'Intermedio',icon:'📈',
+    analogy:'Si cuando subes el presupuesto de ads tus conversiones también suben consistentemente, hay correlación positiva. Pero correlación no implica causalidad: las ventas de helados correlacionan con ahogamientos en verano — ambas suben por el calor, no porque una cause la otra.',
+    code:`// Correlación entre presupuesto y conversiones:
+=CORREL(Campanas[Presupuesto], Campanas[Conversiones])
+
+// Resultado: siempre entre -1 y 1
+// -1 = correlación inversa perfecta
+//  0 = sin relación lineal detectable
+// +1 = correlación directa perfecta
+
+// Regla práctica para marketing:
+// |r| < 0.3  → débil     |r| 0.3-0.7 → moderada
+// |r| > 0.7  → fuerte    |r| > 0.9   → muy fuerte`,
+    table:{headers:['Variable A','Variable B','r','Interpretación'],rows:[['Presupuesto Paid','Conversiones','0.87','Correlación fuerte'],['Impresiones','Clicks','0.93','Muy fuerte'],['Día del mes','Revenue','0.08','Sin correlación lineal'],['Precio unitario','Tasa conversión','-0.64','Inversa moderada']],result:'CORREL(Presupuesto, Conversiones) → 0.87'},
+    error:'CORREL solo detecta relaciones LINEALES. Dos variables pueden tener una relación fuerte no lineal y CORREL devolverá un valor bajo. Visualiza siempre el scatter plot antes de concluir.'
+  },
+  {
+    name:'LINEST',tag:'Regresión lineal — la línea de mejor ajuste',diff:'Avanzado',icon:'📐',
+    analogy:'Imagina los puntos de un gráfico: presupuesto en X, revenue en Y. LINEST traza la mejor línea recta que los atraviesa. Te da la pendiente (cuánto sube el revenue por cada euro invertido) y el R² (qué tan bien explica el modelo los datos reales).',
+    code:`// En M365 (derrama automáticamente — seleccionar rango 2x2+):
+=LINEST(Campanas[Revenue], Campanas[Presupuesto], TRUE, TRUE)
+// Fila 1: pendiente, intercepto
+// Fila 3: R², error estándar de la regresión
+
+// Predicción con FORECAST.LINEAR (más sencillo):
+=FORECAST.LINEAR(50000, Campanas[Revenue], Campanas[Presupuesto])
+
+// R² como función independiente:
+=RSQ(Campanas[Revenue], Campanas[Presupuesto])
+// 0.92 → el modelo explica el 92% de la varianza del revenue`,
+    table:{headers:['Presupuesto (€)','Revenue (€)','Predicho','Residuo'],rows:[['€5,000','€18,200','€17,800','€400'],['€10,000','€34,500','€33,600','€900'],['€15,000','€48,100','€49,400','-€1,300'],['€20,000','€65,800','€65,200','€600']],result:'R² = 0.996 | Pendiente: €3.16 de revenue por cada € invertido'},
+    error:'Verifica el R² antes de usar el modelo. Un R² < 0.6 indica que el modelo lineal no es adecuado para esos datos. Valida también con un scatter plot.'
+  },
+  {
+    name:'NORM.DIST',tag:'Probabilidad bajo la distribución normal',diff:'Avanzado',icon:'🔔',
+    analogy:'Si tu revenue mensual tiene media €85K y desviación estándar €12K, NORM.DIST te dice la probabilidad de que el próximo mes sea menor a €100K. Convierte la campana de Gauss en un número útil para fijar targets con base estadística, no intuición.',
+    code:`// P(revenue < €100K) dado μ=85K, σ=12K:
+=NORM.DIST(100000, 85000, 12000, TRUE)   // → 0.894 = 89.4%
+
+// P(revenue entre €75K y €95K):
+=NORM.DIST(95000,85000,12000,TRUE) - NORM.DIST(75000,85000,12000,TRUE)
+
+// Target para el percentil 90 de revenue (función inversa):
+=NORM.INV(0.90, 85000, 12000)
+// → €100,378 = valor que se supera solo el 10% del tiempo`,
+    table:{headers:['Target Revenue','P(Revenue < Target)','Lectura de negocio'],rows:[['€70,000','21.2%','Conservador — fácil de alcanzar'],['€85,000','50.0%','Igual a la media histórica'],['€100,000','89.4%','Ambicioso'],['€110,000','97.3%','Muy difícil de superar']],result:'NORM.INV(0.50, 85000, 12000) → €85,000 (la media)'},
+    error:'cumulative=TRUE devuelve probabilidad acumulada (lo que necesitas para análisis). cumulative=FALSE devuelve densidad (para graficar la campana). Confundirlos da números que parecen válidos pero no lo son.'
+  },
+];
+
+function StatsTab() {
+  return (
+    <div className="fade-up">
+      <SH2 title="Análisis estadístico" sub="Excel tiene más estadística de la que la mayoría usa. Aquí la que necesita un analista de negocio."/>
+      {STATS_DATA.map(d => <FormulaCard key={d.name} d={d}/>)}
+    </div>
+  );
+}
+/* ═══════════════════════════════════════════════
+   PHASE 3 — POWER QUERY · TABLAS DINÁMICAS
+═══════════════════════════════════════════════ */
+
+const PQ_STEPS = [
+  {
+    n:'01', title:'Conectar a fuentes de datos',
+    desc:'Power Query se conecta a CSV, Excel, SQL, APIs web, SharePoint y más — sin una línea de código.',
+    code:`// Datos > Obtener datos > Desde archivo / Base de datos / Web
+
+// CSV de CRM:
+Datos > Obtener datos > Desde archivo > Texto/CSV
+
+// API web (retorna JSON):
+Datos > Obtener datos > Desde otras fuentes > Desde web
+// URL: https://api.example.com/campaigns?key=TOKEN
+
+// Google Sheets (hoja pública):
+// Archivo > Publicar en la web > formato CSV → usar esa URL`,
+    tip:'Siempre selecciona "Transformar datos" en vez de "Cargar" — así entras al editor antes de que los datos lleguen a tu hoja.'
+  },
+  {
+    n:'02', title:'Limpiar y estandarizar',
+    desc:'Power Query registra cada paso de limpieza como una acción reproducible. La próxima vez que lleguen datos nuevos, un solo clic repite todo el proceso.',
+    code:`// Todas estas operaciones son clics — sin código:
+// 1. Eliminar filas en blanco:
+//    Inicio > Reducir filas > Eliminar filas en blanco
+// 2. Recortar espacios extra:
+//    Clic derecho en columna > Transformar > Recortar
+// 3. Cambiar tipo de datos:
+//    Clic en el icono de tipo en el encabezado de columna
+// 4. Reemplazar valores nulos:
+//    Clic derecho > Reemplazar valores → null → 0
+
+// El M Language equivalente (visible en la barra de fórmulas):
+= Table.TransformColumnTypes(Fuente,{{"Fecha", type date}})
+= Table.ReplaceValue(Paso, null, 0, Replacer.ReplaceValue,{"Revenue"})`,
+    error:'El paso "Tipo detectado" que Power Query agrega automáticamente puede romper la carga si los datos futuros usan un formato diferente. Ajusta los tipos manualmente.'
+  },
+  {
+    n:'03', title:'Transformar y enriquecer',
+    desc:'Columnas calculadas, pivot, unpivot — Power Query puede reestructurar cualquier forma de datos sin tocar el original.',
+    code:`// Columna calculada personalizada:
+// Agregar columna > Columna personalizada
+= [Revenue] - [Cost]      // Profit
+= [Revenue] / [Clicks]    // Revenue por clic
+
+// Extraer partes de fecha:
+// Agregar columna > Fecha > Año / Mes / Trimestre
+
+// UNPIVOT — convertir columnas en filas (formato long):
+// Seleccionar columnas > Transformar > Anular dinamización
+
+// Antes:                      Después:
+// Camp | S1 | S2 | S3      Camp | Semana | Valor
+// Email|100 |120 | 95  →   Email| S1     | 100
+// Social|80 | 95 |110      Email| S2     | 120`,
+    tip:'Unpivot es la transformación más importante para análisis de cohortes y series temporales. Las herramientas analíticas necesitan formato "long" (una fila por observación), no "wide" (una columna por período).'
+  },
+  {
+    n:'04', title:'Merge y Append de tablas',
+    desc:'Merge = JOIN por clave (combina columnas). Append = UNION ALL (apila filas). Las dos operaciones de combinación fundamentales.',
+    code:`// MERGE — equivalente a SQL JOIN:
+// Inicio > Combinar > Combinar consultas
+// Tipos: Inner / Left Outer / Right Outer / Full Outer / Anti
+
+// APPEND — equivalente a SQL UNION ALL:
+// Inicio > Combinar > Anexar consultas
+// Útil para combinar datos de múltiples meses, regiones, fuentes
+
+// M Language:
+= Table.NestedJoin(Campanas,"ID_Canal",Canales,"ID","Info",JoinKind.LeftOuter)
+= Table.Combine({Enero, Febrero, Marzo})`,
+    table:{
+      headers:['Operación','Equivalente SQL','Caso de uso'],
+      rows:[
+        ['Merge > Inner','INNER JOIN','Solo registros con match en ambas tablas'],
+        ['Merge > Left Outer','LEFT JOIN','Todos los de la tabla izquierda'],
+        ['Merge > Full Outer','FULL OUTER JOIN','Todos los registros de ambas tablas'],
+        ['Append','UNION ALL','Apilar datos de misma estructura'],
+        ['Group By','GROUP BY','Resumir por categoría'],
+      ]
+    },
+    error:'En un Left Outer Join los registros sin match aparecen con null — no se eliminan. Confundirlo con Inner Join puede hacer que pierdas registros sin notarlo.'
+  },
+  {
+    n:'05', title:'Refresh automático',
+    desc:'Una vez configurada la consulta, actualizar todos los datos es un clic — o puede ocurrir automáticamente.',
+    code:`// Actualizar manualmente:
+Datos > Actualizar todo   (atajo: Ctrl+Alt+F5)
+
+// Actualizar al abrir el archivo:
+Datos > Consultas y conexiones >
+Clic derecho en consulta > Propiedades >
+☑ Actualizar al abrir el archivo
+
+// Refresh en background (no bloquea Excel):
+Propiedades > ☑ Habilitar actualización en segundo plano`,
+    tip:'Si la fuente es un archivo CSV en ruta local (C:\\...), el refresh fallará en otro equipo. Usa rutas de SharePoint u OneDrive para que funcione en toda la organización.'
+  },
+];
+
+function PowerQueryTab() {
+  return (
+    <div className="fade-up">
+      <SH2 title="Power Query" sub="ETL sin código: conectar, limpiar, transformar y combinar datos — repetible con un clic."/>
+      <div className="analogy-box" style={{marginBottom:'1.5rem'}}>
+        <span style={{marginRight:'.4rem'}}>🔄</span>
+        <strong>La analogía completa:</strong> Power Query es como una receta de cocina grabada. La primera vez limpias los datos manualmente siguiendo los pasos. La segunda vez presionas "Refresh" y Power Query los repite automáticamente. Cada transformación queda en un log visible, editable y reproducible.
+      </div>
+      {PQ_STEPS.map(({ n, title, desc, code, table, error, tip }) => (
+        <div key={n} className="card" style={{marginBottom:'1.4rem'}}>
+          <div style={{display:'flex',alignItems:'flex-start',gap:'.82rem',marginBottom:'.82rem'}}>
+            <span className="step-pill">{n}</span>
+            <div>
+              <h3 style={{fontSize:'.95rem',fontWeight:700,color:'#e8e6f0',marginBottom:'.14rem'}}>{title}</h3>
+              <p style={{fontSize:'.8rem',color:'#8b86a8'}}>{desc}</p>
+            </div>
+          </div>
+          <Code code={code}/>
+          {table && <div style={{marginTop:'.82rem'}}><DT {...table}/></div>}
+          {error && <Err text={error}/>}
+          {tip   && <Tip text={tip}/>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── TAB 5: PIVOTS ── */
+const PIVOT_DATA = [
+  {
+    name:'Campos calculados',tag:'Fórmulas dentro del pivot',diff:'Avanzado',icon:'🧮',
+    analogy:'Un campo calculado es como agregar una columna de fórmulas dentro de la tabla dinámica. En vez de operar sobre las filas del dataset, opera sobre los subtotales que ya calculó el pivot — es una fórmula sobre el resumen, no sobre los datos crudos.',
+    code:`// Analizar > Campos, Elementos y Conjuntos > Campo calculado
+
+// Campo: Margen de ganancia
+Nombre: Margen
+Formula: = Profit / Revenue   // Profit y Revenue son campos del pivot
+
+// Campo: ROAS
+Nombre: ROAS
+Formula: = Revenue / Spend
+
+// IMPORTANTE: los campos calculados SIEMPRE suman primero y dividen después
+// = SUM(Profit) / SUM(Revenue)  — NO promedia filas individuales
+// Si necesitas calcular por fila, usa una columna en el dataset original`,
+    error:'Los campos calculados operan sobre valores agregados (suma), no sobre cada fila. Si quieres margen por fila individual, agrega una columna calculada al dataset original, no al pivot.'
+  },
+  {
+    name:'Segmentadores (Slicers)',tag:'Filtros visuales conectados a múltiples pivots',diff:'Interactividad',icon:'🎛️',
+    analogy:'Los slicers son botones de filtro visuales que cualquier usuario puede usar sin entender nada de tablas dinámicas. Puedes conectar un mismo slicer a múltiples tablas dinámicas y gráficos — al hacer clic, todo se filtra en sincronía. Son la base de los dashboards ejecutivos en Excel.',
+    code:`// Agregar slicer:
+Analizar > Insertar Segmentación de datos
+// Seleccionar campo: Canal, Región, Mes, etc.
+
+// Conectar un slicer a múltiples tablas dinámicas:
+Clic derecho en slicer > Conexiones de informe
+// ☑ Tabla Dinámica 1  ☑ Tabla Dinámica 2  ☑ Gráfico 1
+
+// Selección múltiple en slicer:
+// Shift+clic (rango) o Ctrl+clic (individual)
+// O activar el botón de selección múltiple en el slicer
+
+// Personalizar estilo:
+// Pestaña Slicer > Estilos de slicer > Nuevo estilo`,
+    tip:'Organiza los slicers en una fila horizontal sobre el dashboard con tamaño uniforme. Usa "Columnas" en el panel del slicer para mostrar múltiples opciones en grid en vez de lista vertical.'
+  },
+  {
+    name:'Timeline (Escala de tiempo)',tag:'Filtro visual de fechas con slider',diff:'Fechas',icon:'📅',
+    analogy:'El Timeline es un slicer especializado para fechas con una barra deslizable. El usuario filtra por año, trimestre, mes o día con un control visual — sin escribir nada. Ideal para dashboards donde la dimensión temporal es central.',
+    code:`// Agregar timeline:
+Analizar > Insertar Escala de tiempo
+// Solo funciona con campos de FECHA real (no texto que parezca fecha)
+
+// Niveles de granularidad disponibles:
+// AÑOS > TRIMESTRES > MESES > DÍAS
+// Cambiar con el selector desplegable en la esquina superior derecha
+
+// El Timeline y los slicers se combinan:
+// Timeline filtra por período → Slicer filtra por Canal
+// Ambos actúan sobre el mismo pivot simultáneamente`,
+    error:'Si el campo de fecha está almacenado como texto, el Timeline no aparece disponible. Verifica con =ISNUMBER(celda) — si devuelve FALSE, convierte a fecha real primero.'
+  },
+  {
+    name:'Agrupaciones personalizadas',tag:'Segmentar sin modificar el dataset',diff:'Segmentación',icon:'📦',
+    analogy:'Las agrupaciones te permiten crear segmentos que no existen como columna en tu dataset. Agrupar edades en rangos (18-24, 25-34) o fechas en quincenas personalizadas — sin tocar los datos originales.',
+    code:`// Agrupar NÚMEROS en rangos (ej: age buckets):
+// Clic derecho en campo numérico en el pivot > Agrupar
+// Inicio: 18 / Fin: 65 / Por: 10
+// → genera automáticamente: 18-27, 28-37, 38-47...
+
+// Agrupar FECHAS:
+// Clic derecho en campo fecha > Agrupar
+// Seleccionar: Años + Trimestres + Meses (jerarquía)
+
+// Agrupar TEXTO manualmente:
+// Seleccionar filas a agrupar (Ctrl+clic) > Clic derecho > Agrupar
+// → útil para agrupar países en regiones, productos en categorías`,
+    tip:'Las agrupaciones de texto no afectan el dataset original. Pero si el pivot recibe datos nuevos con valores no asignados, aparece un grupo automático "Otros" — revísalo en cada refresh.'
+  },
+];
+
+function PivotsTab() {
+  return (
+    <div className="fade-up">
+      <SH2 title="Tablas dinámicas avanzadas" sub="Más allá del conteo básico: campos calculados, segmentadores y agrupaciones."/>
+      <div className="analogy-box" style={{marginBottom:'1.5rem'}}>
+        <span style={{marginRight:'.4rem'}}>🔄</span>
+        Una tabla dinámica es una vista resumida que se recalcula instantáneamente cuando cambias dimensiones o métricas. No modifica los datos originales. Es el informe más flexible de Excel — y la mayoría de usuarios solo usa el 20% de sus capacidades.
+      </div>
+      {PIVOT_DATA.map(d => <FormulaCard key={d.name} d={d}/>)}
+    </div>
+  );
+}
+/* ═══════════════════════════════════════════════
+   PHASE 4 — CASOS REALES · CHEAT SHEET
+═══════════════════════════════════════════════ */
+
+function CasesTab() {
+  return (
+    <div className="fade-up">
+      <SH2 title="Casos de uso reales" sub="Análisis que resuelven preguntas concretas de negocio — con las fórmulas del mundo real."/>
+
+      {/* Cohort Analysis */}
+      <div className="card" style={{marginBottom:'1.5rem'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
+          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Análisis de cohortes</h3>
+          <span style={{color:'#8b86a8',fontSize:'.77rem'}}>¿Cuántos usuarios siguen activos semana a semana?</span>
+          <div style={{marginLeft:'auto',display:'flex',gap:'.35rem'}}><Badge text="Marketing" color="teal"/><Badge text="Simulador" color="green"/></div>
+        </div>
+        <Analogy icon="👥" text="Una cohorte es un grupo de usuarios que empezaron en el mismo período. El análisis de cohortes muestra cuántos siguen activos semana a semana. El primer valor siempre es 100% — lo que importa es cuánto cae y a qué velocidad se estabiliza."/>
+        <Code code={`// Estructura del dataset:
+// Columnas: Cohorte (mes adquisición) | Semana | Usuarios_Activos
+
+// Tasa de retención por semana (Week N / Week 0):
+=C3/$C$2
+
+// Fórmula para detectar la semana de estabilización:
+// Cuando la caída entre semanas es < 2pp, la cohorte se estabilizó
+=ABS(D3-D2)<0.02
+
+// Moving average para suavizar la curva:
+=AVERAGE(OFFSET(C2,-MIN(ROW()-2,3),0,MIN(ROW()-1,4),1))`} label="Estructura del análisis"/>
+        {typeof CohortSimulator !== 'undefined'
+          ? <div style={{marginTop:'1rem'}}><CohortSimulator/></div>
+          : <div style={{marginTop:'1rem',padding:'1rem',background:'#0d0b22',borderRadius:'8px',color:'#504d70',fontSize:'.8rem',fontFamily:'DM Mono, monospace',textAlign:'center'}}>⏳ Simulador cargando...</div>
+        }
+      </div>
+
+      {/* Attribution */}
+      <div className="card" style={{marginBottom:'1.5rem'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
+          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Atribución simplificada de marketing</h3>
+          <Badge text="Marketing" color="teal"/>
+        </div>
+        <Analogy icon="🎯" text="La atribución responde: ¿qué canal generó la conversión? El modelo más simple asigna el 100% al último clic. En Excel puedes construir Last Click, First Click y Linear para comparar cuánto crédito recibe cada canal."/>
+        <Code code={`// Modelo Last Click (100% crédito al último canal):
+=XLOOKUP(OrderID, Touchpoints[OrderID], Touchpoints[Last_Channel])
+
+// Modelo Linear (crédito dividido por igual entre touchpoints):
+=Revenue / COUNTIF(Touchpoints[OrderID], B2)
+
+// Modelo Time Decay (más reciente = más crédito):
+// Peso = 2^(-(días_antes_conversión / 7))
+=POWER(2, -(Touchpoints[Dias_Antes]/7))
+
+// Normalizar pesos para que sumen 1:
+=C2 / SUMIF(Touchpoints[OrderID], B2, Touchpoints[Peso])`} label="Los tres modelos en fórmulas"/>
+        <DT
+          headers={['Canal','Last Click','First Click','Linear']}
+          rows={[
+            ['Paid Search','€45,200 (38%)','€28,100 (24%)','€32,400 (27%)'],
+            ['Email','€31,800 (27%)','€22,500 (19%)','€26,100 (22%)'],
+            ['Social','€18,400 (15%)','€38,200 (32%)','€28,700 (24%)'],
+            ['Display','€22,100 (19%)','€29,400 (25%)','€31,000 (26%)'],
+          ]}
+          result="Last Click sub-estima canales de awareness (Social, Display)"
+        />
+      </div>
+
+      {/* Moving Average Forecast */}
+      <div className="card" style={{marginBottom:'1.5rem'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
+          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Forecast con media móvil</h3>
+          <Badge text="Negocio" color="orange"/>
+        </div>
+        <Analogy icon="📉" text="Una media móvil suaviza los picos y valles del revenue semanal para revelar la tendencia real. Es como poner un filtro en el audio: elimina el ruido y deja pasar la señal. Más simple que regresión pero muy efectiva para detectar tendencias de corto plazo."/>
+        <Code code={`// Media móvil de 4 semanas:
+=AVERAGE(OFFSET(C2, -3, 0, 4, 1))
+
+// Media móvil dinámica (funciona desde la primera fila):
+=AVERAGE(OFFSET(C2, -MIN(ROW()-2,3), 0, MIN(ROW()-1,4), 1))
+
+// Forecast: extender la tendencia con regresión lineal:
+=FORECAST.LINEAR(
+  MAX(Semanas[Num]) + 1,   // próxima semana
+  TAKE(Semanas[Revenue],-8), // últimas 8 semanas
+  TAKE(Semanas[Num],-8)      // sus índices
+)
+
+// Límites de confianza del forecast (±1 STDEV):
+=E2 + STDEV.S(OFFSET(C2,-7,0,8,1))  // límite superior
+=E2 - STDEV.S(OFFSET(C2,-7,0,8,1))  // límite inferior`}/>
+        <DT
+          headers={['Semana','Revenue','Media Móvil 4s','Forecast']}
+          rows={[
+            ['S09','€11,200','€10,850',''],
+            ['S10','€13,400','€11,625',''],
+            ['S11','€10,800','€11,575',''],
+            ['S12','€14,100','€12,375',''],
+            ['S13 →','','','€13,100 ± €1,450'],
+          ]}
+          result="La media móvil revela una tendencia alcista del 14% en 4 semanas"
+        />
+      </div>
+
+      {/* ABC Analysis */}
+      <div className="card" style={{marginBottom:'1rem'}}>
+        <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
+          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Análisis ABC de productos / campañas</h3>
+          <Badge text="Negocio" color="navy"/>
+        </div>
+        <Analogy icon="🅰️" text="El análisis ABC aplica el principio de Pareto: el 20% de los productos genera el 80% del revenue. Clasifica cada ítem en A (top 80%), B (siguiente 15%) y C (último 5%). Te dice dónde enfocar el presupuesto y qué candidatos eliminar."/>
+        <Code code={`// 1. Calcular % del revenue total por producto:
+=Tabla[Revenue] / SUM(Tabla[Revenue])
+
+// 2. Calcular % acumulado (con datos ordenados desc.):
+=D1 + C2     // suma acumulada simple
+// O dinámico con SUMIF:
+=SUMIF(Tabla[Revenue],">="&B2, Tabla[PctRevenue])
+
+// 3. Clasificar en A / B / C:
+=IF(E2<=0.80,"A", IF(E2<=0.95,"B","C"))
+
+// 4. Filtrar solo los ítems de categoría A:
+=FILTER(Tabla, Tabla[ABC]="A")`}/>
+        <DT
+          headers={['Producto','Revenue','% Acum.','Categoría']}
+          rows={[
+            ['Pro Plan','€82,400','34.2%','A'],
+            ['Enterprise','€71,200','63.8%','A'],
+            ['Business','€38,600','79.8%','A'],
+            ['Starter','€19,400','87.9%','B'],
+            ['Add-on A','€14,100','93.7%','B'],
+            ['Add-on B','€8,200','97.1%','C'],
+          ]}
+          result="3 productos (43%) generan el 80% del revenue → categoría A"
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ── TAB 7: CHEAT SHEET ── */
+const CS_DATA = [
+  {cat:'Lookup',items:[
+    {fn:'XLOOKUP',  desc:'Búsqueda moderna en cualquier dirección',ex:'=XLOOKUP(A2,Tabla[ID],Tabla[Email],"N/A")'},
+    {fn:'INDEX+MATCH',desc:'Lookup bidireccional — compatible con todas las versiones',ex:'=INDEX(B:B,MATCH(A2,C:C,0))'},
+    {fn:'FILTER',   desc:'Filtrar tabla por condición — resultado dinámico',ex:'=FILTER(A:C, B:B>1000, "Vacío")'},
+    {fn:'UNIQUE',   desc:'Lista sin duplicados auto-actualizable',ex:'=SORT(UNIQUE(A:A))'},
+    {fn:'SORT',     desc:'Ordenar tabla sin tocar el original',ex:'=SORT(A:B, 2, -1)'},
+  ]},
+  {cat:'Agregación',items:[
+    {fn:'SUMIFS',   desc:'Suma con múltiples condiciones',ex:'=SUMIFS(Rev,Canal,"Email",Mes,"Q1")'},
+    {fn:'COUNTIFS', desc:'Contar con múltiples condiciones',ex:'=COUNTIFS(Status,"Won",Region,"Norte")'},
+    {fn:'AVERAGEIFS',desc:'Promedio condicional',ex:'=AVERAGEIFS(Revenue,Canal,"Social")'},
+    {fn:'MAXIFS',   desc:'Máximo con condición',ex:'=MAXIFS(Revenue,Canal,"Email")'},
+    {fn:'SUMPRODUCT',desc:'Multiplicar arrays y sumar — el navaja suiza',ex:'=SUMPRODUCT((A:A="X")*(B:B>100)*C:C)'},
+  ]},
+  {cat:'Estadística',items:[
+    {fn:'PERCENTILE.INC',desc:'Percentil k de una distribución (0 a 1)',ex:'=PERCENTILE.INC(LTV,0.75)'},
+    {fn:'STDEV.S',  desc:'Desviación estándar de muestra',ex:'=STDEV.S(Ventas[Revenue])'},
+    {fn:'CORREL',   desc:'Coeficiente de correlación (−1 a 1)',ex:'=CORREL(Spend,Conversiones)'},
+    {fn:'FORECAST.LINEAR',desc:'Predicción lineal basada en datos históricos',ex:'=FORECAST.LINEAR(13,Revenue,Semanas)'},
+    {fn:'NORM.DIST',desc:'Probabilidad bajo distribución normal',ex:'=NORM.DIST(100000,85000,12000,TRUE)'},
+  ]},
+  {cat:'Texto y fechas',items:[
+    {fn:'TEXTJOIN', desc:'Unir textos con separador, ignorando blancos',ex:'=TEXTJOIN(", ",TRUE,A2:A10)'},
+    {fn:'EOMONTH',  desc:'Último día del mes (n meses hacia adelante/atrás)',ex:'=EOMONTH(TODAY(),0)'},
+    {fn:'NETWORKDAYS',desc:'Días laborables entre dos fechas',ex:'=NETWORKDAYS(A2,B2)'},
+  ]},
+  {cat:'Avanzado',items:[
+    {fn:'LET',      desc:'Nombrar cálculos intermedios para reutilizar',ex:'=LET(x,A2*B2, x/SUM(A:A))'},
+    {fn:'IFERROR',  desc:'Devolver valor alternativo ante cualquier error',ex:'=IFERROR(A2/B2, 0)'},
+  ]},
+];
+
+function CheatSheetTab() {
+  return (
+    <div className="fade-up">
+      <SH2 title="Cheat Sheet" sub="Las 20 fórmulas que más usa un analista de datos — con ejemplos concretos."/>
+      {CS_DATA.map(({ cat, items }) => (
+        <div key={cat} style={{marginBottom:'1.5rem'}}>
+          <div style={{display:'flex',alignItems:'center',gap:'.5rem',marginBottom:'.72rem'}}>
+            <h3 style={{fontSize:'.82rem',fontWeight:700,color:'#8b86a8',textTransform:'uppercase',letterSpacing:'.08em'}}>{cat}</h3>
+            <div style={{flex:1,height:'1px',background:'#1a1542'}}/>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(270px,1fr))',gap:'.72rem'}}>
+            {items.map(({ fn, desc, ex }) => (
+              <div key={fn} className="cs-card">
+                <div className="cs-fn">{fn}</div>
+                <div style={{fontSize:'.76rem',color:'#c4c0d8',margin:'.22rem 0 .28rem'}}>{desc}</div>
+                <div className="cs-ex">{ex}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {/* Quick Reference */}
+      <div className="card" style={{marginTop:'.5rem'}}>
+        <h3 style={{fontSize:'.93rem',fontWeight:700,color:'#e8e6f0',marginBottom:'.82rem'}}>Atajos y errores clave</h3>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(210px,1fr))',gap:'.6rem'}}>
+          {[
+            ['Ctrl+T','Convertir rango a tabla'],
+            ['Ctrl+Alt+F5','Actualizar todo (Power Query)'],
+            ['F4','Anclar referencia ($A$1)'],
+            ['Ctrl+`','Mostrar todas las fórmulas'],
+            ['Alt+F11','Abrir editor VBA'],
+            ['Ctrl+Shift+Enter','Array formula (Excel antiguo)'],
+            ['#SPILL!','La zona de derrame no está vacía'],
+            ['#N/A','No se encontró el valor buscado'],
+            ['#REF!','Referencia inválida (celda eliminada)'],
+            ['#VALUE!','Tipo de dato incorrecto en la fórmula'],
+            ['* en arrays','AND lógico entre dos condiciones'],
+            ['+ en arrays','OR lógico entre dos condiciones'],
+          ].map(([key, desc]) => (
+            <div key={key} style={{display:'flex',gap:'.55rem',alignItems:'flex-start'}}>
+              <code style={{background:'#0d0b22',border:'1px solid #1e1b46',borderRadius:'4px',padding:'.08rem .42rem',fontFamily:'DM Mono, monospace',fontSize:'.73rem',color:'#13d6c1',whiteSpace:'nowrap',flexShrink:0}}>{key}</code>
+              <span style={{fontSize:'.77rem',color:'#8b86a8',lineHeight:'1.5'}}>{desc}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+/* ═══════════════════════════════════════════════
+   PHASE 5 — SIMULADOR DE COHORTES · QUIZ
+═══════════════════════════════════════════════ */
+
+function CohortSimulator() {
+  const [ret, setRet] = useState([100, 62, 45, 35, 28, 24, 21, 19, 18]);
+  const bench = [100, 50, 35, 25, 20, 17, 15, 14, 13];
+
+  const W=560, H=220, PL=42, PR=16, PT=18, PB=30;
+  const iW=W-PL-PR, iH=H-PT-PB;
+  const toX = i => PL + (i/8)*iW;
+  const toY = v => PT + (1 - v/100)*iH;
+  const pathD = pts => pts.map((v,i)=>`${i===0?'M':'L'}${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' ');
+
+  const updateWeek = (idx, val) => {
+    const next = [...ret];
+    next[idx] = +val;
+    for (let j = idx+1; j < next.length; j++) {
+      if (next[j] > next[j-1]) next[j] = next[j-1];
+    }
+    setRet(next);
+  };
+
+  const drop1   = ret[0] - ret[1];
+  const w4      = ret[4];
+  const final   = ret[8];
+  const vsBench = final - bench[8];
+
+  return (
+    <div>
+      <div style={{marginBottom:'.85rem',padding:'.6rem .82rem',background:'rgba(19,214,193,.06)',border:'1px solid rgba(19,214,193,.18)',borderRadius:'8px',fontSize:'.8rem',color:'#9af0e8'}}>
+        <strong style={{color:'#13d6c1'}}>Cómo usarlo:</strong> Ajusta los sliders para ingresar la retención por semana. La línea teal es tu cohorte; la gris punteada es un benchmark de SaaS típico.
+      </div>
+
+      {/* SVG Chart */}
+      <div style={{overflowX:'auto',marginBottom:'.85rem'}}>
+        <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{maxWidth:`${W}px`,display:'block'}}>
+          <defs>
+            <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#13d6c1" stopOpacity="0.18"/>
+              <stop offset="100%" stopColor="#13d6c1" stopOpacity="0.02"/>
+            </linearGradient>
+          </defs>
+          {/* Grid lines */}
+          {[0,25,50,75,100].map(v=>(
+            <g key={v}>
+              <line x1={PL} y1={toY(v)} x2={W-PR} y2={toY(v)} stroke="#1a1542" strokeWidth="1"/>
+              <text x={PL-5} y={toY(v)+4} textAnchor="end" fill="#3a3660" fontSize="9" fontFamily="DM Mono,monospace">{v}%</text>
+            </g>
+          ))}
+          {/* X axis labels */}
+          {ret.map((_,i)=>(
+            <text key={i} x={toX(i)} y={H-8} textAnchor="middle" fill="#3a3660" fontSize="9" fontFamily="DM Mono,monospace">W{i}</text>
+          ))}
+          {/* Benchmark */}
+          <path d={pathD(bench)} fill="none" stroke="#2a2650" strokeWidth="1.5" strokeDasharray="4 3"/>
+          <text x={toX(7)+4} y={toY(bench[7])-5} fill="#3a3660" fontSize="8" fontFamily="DM Mono,monospace">Benchmark</text>
+          {/* Area */}
+          <path d={`${pathD(ret)} L${toX(8).toFixed(1)},${toY(0).toFixed(1)} L${toX(0).toFixed(1)},${toY(0).toFixed(1)}Z`} fill="url(#cg)"/>
+          {/* User line */}
+          <path d={pathD(ret)} fill="none" stroke="#13d6c1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          {/* Dots */}
+          {ret.map((v,i)=>(
+            <g key={i}>
+              <circle cx={toX(i)} cy={toY(v)} r="4" fill="#09071a" stroke="#13d6c1" strokeWidth="2"/>
+              <text x={toX(i)} y={toY(v)-8} textAnchor="middle" fill="#13d6c1" fontSize="8" fontFamily="DM Mono,monospace">{v}%</text>
+            </g>
+          ))}
+          <text x={PL+8} y={toY(ret[0])-13} fill="#13d6c1" fontSize="8" fontFamily="DM Mono,monospace" fontWeight="700">Tu cohorte</text>
+        </svg>
+      </div>
+
+      {/* Sliders */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(96px,1fr))',gap:'.55rem',marginBottom:'.85rem'}}>
+        {ret.map((v,i)=>(
+          <div key={i} style={{background:'#0d0b22',border:'1px solid #1a1542',borderRadius:'8px',padding:'.6rem .55rem',textAlign:'center'}}>
+            <div style={{fontSize:'.67rem',color:'#3a3660',marginBottom:'.28rem',fontFamily:'DM Mono, monospace'}}>Sem. {i}</div>
+            {i===0
+              ? <div style={{fontSize:'1.1rem',fontWeight:700,color:'#13d6c1',fontFamily:'DM Mono, monospace'}}>100%</div>
+              : <>
+                  <input type="range" min="0" max={ret[i-1]} value={v} onChange={e=>updateWeek(i,e.target.value)} style={{marginBottom:'.22rem'}}/>
+                  <div style={{fontSize:'.9rem',fontWeight:700,color:'#13d6c1',fontFamily:'DM Mono, monospace'}}>{v}%</div>
+                </>
+            }
+          </div>
+        ))}
+      </div>
+
+      {/* KPIs */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:'.65rem'}}>
+        {[
+          {label:'Caída W0→W1',  value:`-${drop1}pp`,   color: drop1>50?'#ef4444':drop1>30?'#fb923c':'#10b981'},
+          {label:'Retención W4', value:`${w4}%`,         color: w4>=30?'#10b981':w4>=20?'#fb923c':'#ef4444'},
+          {label:'Retención W8', value:`${final}%`,      color: final>=15?'#10b981':final>=10?'#fb923c':'#ef4444'},
+          {label:'vs Benchmark', value:`${vsBench>=0?'+':''}${vsBench}pp`, color: vsBench>=0?'#10b981':'#ef4444'},
+        ].map(({label,value,color})=>(
+          <div key={label} className="card" style={{textAlign:'center',padding:'.75rem'}}>
+            <div style={{fontSize:'.68rem',color:'#8b86a8',marginBottom:'.25rem'}}>{label}</div>
+            <div style={{fontSize:'1.28rem',fontWeight:800,color,fontFamily:'DM Mono, monospace'}}>{value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── QUIZ ── */
+const QUIZ_DATA = [
+  {
+    q:'¿Cuál argumento de XLOOKUP define qué devolver cuando no se encuentra la coincidencia?',
+    opts:['return_array','[if_not_found]','match_mode','lookup_array'],
+    ans:1,
+    exp:'El cuarto argumento [if_not_found] te permite devolver un texto personalizado como "Sin registro" en lugar del error #N/A. Omitirlo es la causa número uno de #N/A en reportes productivos.'
+  },
+  {
+    q:'CORREL(A, B) devuelve un coeficiente que siempre está en el rango…',
+    opts:['0 a 1','−1 a 1','0 a 100','−100 a 100'],
+    ans:1,
+    exp:'El coeficiente de correlación de Pearson va de −1 (correlación inversa perfecta) a 1 (correlación directa perfecta). 0 indica que no hay relación lineal detectable entre las variables.'
+  },
+  {
+    q:'En Power Query, ¿qué operación combina dos tablas usando una columna clave — equivalente a un JOIN en SQL?',
+    opts:['Append','Merge','Group By','Unpivot'],
+    ans:1,
+    exp:'Merge combina tablas por una clave (JOIN). Append apila filas de misma estructura (UNION ALL). Group By agrega filas en resúmenes. Unpivot transforma columnas en filas para obtener formato "long".'
+  },
+  {
+    q:'¿Qué diferencia fundamental existe entre STDEV.S y STDEV.P?',
+    opts:[
+      'STDEV.S usa denominador n−1 (muestra); STDEV.P usa n (población)',
+      'STDEV.P es siempre más precisa que STDEV.S',
+      'STDEV.P ignora los valores negativos del rango',
+      'No hay diferencia, son fórmulas sinónimas',
+    ],
+    ans:0,
+    exp:'STDEV.S aplica corrección de Bessel (n−1) para estimar la desviación de una muestra. STDEV.P usa n y solo es correcto cuando tienes todos los datos de la población completa, no una muestra.'
+  },
+  {
+    q:'Una fórmula FILTER devuelve el error #SPILL! — ¿cuál es la causa más probable?',
+    opts:[
+      'La condición del filtro tiene un error de tipo de dato',
+      'Las celdas donde debe derramar el resultado no están vacías',
+      'FILTER no está disponible en esta versión de Excel',
+      'El rango de la condición no coincide en tamaño con el array',
+    ],
+    ans:1,
+    exp:'#SPILL! ocurre cuando Excel no puede "derramar" el resultado porque hay datos en las celdas de salida. FILTER, UNIQUE, SORT y otras fórmulas dinámicas necesitan celdas vacías para colocar sus resultados.'
+  },
+];
+
+function QuizSection() {
+  const [qi, setQi]       = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const [score, setScore]  = useState(0);
+  const [done, setDone]    = useState(false);
+
+  const q = QUIZ_DATA[qi];
+  const answered = chosen !== null;
+
+  function pick(idx) {
+    if (answered) return;
+    setChosen(idx);
+    if (idx === q.ans) setScore(s => s+1);
+  }
+
+  function next() {
+    if (qi < QUIZ_DATA.length-1) { setQi(qi+1); setChosen(null); }
+    else setDone(true);
+  }
+
+  function restart() { setQi(0); setChosen(null); setScore(0); setDone(false); }
+
+  return (
+    <section style={{maxWidth:'740px',margin:'3rem auto',padding:'0 1rem 3rem'}}>
+      <div style={{marginBottom:'1.4rem',textAlign:'center'}}>
+        <h2 style={{fontSize:'1.15rem',fontWeight:700,color:'#e8e6f0',marginBottom:'.18rem'}}>Quiz de Verificación</h2>
+        <p style={{color:'#8b86a8',fontSize:'.8rem'}}>5 preguntas — feedback inmediato</p>
+      </div>
+
+      {!done ? (
+        <div className="card">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
+            <span style={{fontSize:'.73rem',color:'#8b86a8',fontFamily:'DM Mono, monospace'}}>{qi+1} / {QUIZ_DATA.length}</span>
+            <span className="result-badge">{score} correctas</span>
+          </div>
+
+          {/* Progress bar */}
+          <div style={{height:'3px',background:'#1a1542',borderRadius:'3px',marginBottom:'.95rem',overflow:'hidden'}}>
+            <div style={{height:'100%',background:'#13d6c1',borderRadius:'3px',width:`${((qi+(answered?1:0))/QUIZ_DATA.length)*100}%`,transition:'width .35s ease'}}/>
+          </div>
+
+          <p style={{fontSize:'.9rem',color:'#e8e6f0',marginBottom:'.95rem',lineHeight:1.65}}>{q.q}</p>
+
+          <div style={{display:'flex',flexDirection:'column',gap:'.45rem',marginBottom:'.95rem'}}>
+            {q.opts.map((opt,idx)=>{
+              let cls='qopt';
+              if (answered) {
+                if (idx===q.ans) cls+=' correct';
+                else if (idx===chosen) cls+=' wrong';
+              }
+              return (
+                <button key={idx} className={cls} onClick={()=>pick(idx)} disabled={answered}>
+                  <span style={{color:'#3a3660',marginRight:'.5rem',fontFamily:'DM Mono, monospace',fontSize:'.78rem'}}>{['A','B','C','D'][idx]}</span>
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
+
+          {answered && (
+            <div className="tip-box" style={{marginBottom:'.95rem'}}>{q.exp}</div>
+          )}
+
+          <div style={{display:'flex',justifyContent:'flex-end'}}>
+            <button className="btn-primary" onClick={next} disabled={!answered}>
+              {qi < QUIZ_DATA.length-1 ? 'Siguiente →' : 'Ver resultado'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="card" style={{textAlign:'center',padding:'2rem 1.5rem'}}>
+          <div style={{fontSize:'2.8rem',marginBottom:'.45rem'}}>
+            {score===5?'🏆':score>=3?'🎯':'📖'}
+          </div>
+          <div style={{fontSize:'2.4rem',fontWeight:800,color:'#13d6c1',fontFamily:'DM Mono, monospace',marginBottom:'.3rem'}}>
+            {score} / {QUIZ_DATA.length}
+          </div>
+          <p style={{color:'#8b86a8',fontSize:'.86rem',marginBottom:'1.4rem'}}>
+            {score===5?'¡Perfecto! Dominas los fundamentos analíticos de Excel.':
+             score>=3?'Bien. Repasa los conceptos donde dudaste.':
+             'Revisa las secciones con más detalle — la práctica lo consolida.'}
+          </p>
+          <button className="btn-primary" onClick={restart}>Reintentar quiz</button>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════════ */
+const TABS = [
+  {id:'foundations', icon:'🏗️', label:'Fundamentos'},
+  {id:'lookup',      icon:'🔍', label:'Lookups'},
+  {id:'stats',       icon:'📈', label:'Estadística'},
+  {id:'powerquery',  icon:'⚡', label:'Power Query'},
+  {id:'pivots',      icon:'🔄', label:'Tablas Dinámicas'},
+  {id:'cases',       icon:'🎯', label:'Casos Reales'},
+  {id:'cheatsheet',  icon:'📋', label:'Cheat Sheet'},
+];
+
+function App() {
+  const [tab, setTab] = useState('foundations');
+
+  function renderTab() {
+    switch(tab) {
+      case 'foundations': return typeof FoundationsTab !== 'undefined' ? <FoundationsTab/> : <Placeholder name="Fundamentos"/>;
+      case 'lookup':      return typeof LookupTab      !== 'undefined' ? <LookupTab/>      : <Placeholder name="Lookups"/>;
+      case 'stats':       return typeof StatsTab       !== 'undefined' ? <StatsTab/>       : <Placeholder name="Estadística"/>;
+      case 'powerquery':  return typeof PowerQueryTab  !== 'undefined' ? <PowerQueryTab/>  : <Placeholder name="Power Query"/>;
+      case 'pivots':      return typeof PivotsTab      !== 'undefined' ? <PivotsTab/>      : <Placeholder name="Tablas Dinámicas"/>;
+      case 'cases':       return typeof CasesTab       !== 'undefined' ? <CasesTab/>       : <Placeholder name="Casos Reales"/>;
+      case 'cheatsheet':  return typeof CheatSheetTab  !== 'undefined' ? <CheatSheetTab/>  : <Placeholder name="Cheat Sheet"/>;
+      default:            return null;
+    }
+  }
+
+  return (
+    <>
+      {/* ── HERO ── */}
+      <header style={{background:'linear-gradient(165deg,#09071a 0%,#14094e 55%,#09071a 100%)',borderBottom:'1px solid #1e1b46',padding:'2.5rem 1rem 2rem',textAlign:'center',position:'relative',overflow:'hidden'}}>
+        <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(circle at 1px 1px,#1a1542 1px,transparent 0)',backgroundSize:'28px 28px',opacity:.3,pointerEvents:'none'}}/>
+        <div style={{position:'relative',maxWidth:'740px',margin:'0 auto'}}>
+          <a href="https://valescabravo.github.io/"
+            style={{display:'inline-flex',alignItems:'center',gap:'.4rem',color:'#8b86a8',fontSize:'.77rem',textDecoration:'none',border:'1px solid #1e1b46',borderRadius:'6px',padding:'.28rem .65rem',marginBottom:'1.2rem',transition:'all .17s'}}
+            onMouseOver={e=>{e.currentTarget.style.borderColor='#13d6c1';e.currentTarget.style.color='#e8e6f0'}}
+            onMouseOut={e=>{e.currentTarget.style.borderColor='#1e1b46';e.currentTarget.style.color='#8b86a8'}}>
+            ← Back to Portfolio
+          </a>
+		  <a href="https://valescabravo.github.io/lab"
+            style={{display:'inline-flex',alignItems:'center',gap:'.4rem',color:'#8b86a8',fontSize:'.77rem',textDecoration:'none',border:'1px solid #1e1b46',borderRadius:'6px',padding:'.28rem .65rem',marginBottom:'1.2rem',transition:'all .17s'}}
+            onMouseOver={e=>{e.currentTarget.style.borderColor='#13d6c1';e.currentTarget.style.color='#e8e6f0'}}
+            onMouseOut={e=>{e.currentTarget.style.borderColor='#1e1b46';e.currentTarget.style.color='#8b86a8'}}>
+            ← Back to the Lab
+          </a>
+          <div style={{display:'flex',justifyContent:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
+            <Badge text="2026" color="teal"/>
+            <Badge text="Interactive Lab" color="navy"/>
+          </div>
+          <h1 style={{fontSize:'clamp(1.7rem,5vw,2.75rem)',fontWeight:800,color:'#e8e6f0',letterSpacing:'-.02em',lineHeight:1.15,marginBottom:'.6rem'}}>
+            Excel<span style={{color:'#13d6c1'}}> Analytics</span> Lab
+          </h1>
+          <p style={{color:'#8b86a8',fontSize:'.93rem',maxWidth:'480px',margin:'0 auto 1.2rem',lineHeight:1.65}}>
+            Excel como herramienta analítica en entornos corporativos. Fórmulas, estadística, Power Query y tablas dinámicas — con casos reales de marketing y negocio.
+          </p>
+          <div style={{display:'flex',justifyContent:'center',gap:'.55rem',flexWrap:'wrap'}}>
+            {['7 módulos','Simulador de cohortes','Quiz interactivo','Cheat Sheet'].map(t=>(
+              <span key={t} style={{background:'rgba(29,8,94,.5)',border:'1px solid #1e1b46',borderRadius:'20px',padding:'.22rem .7rem',fontSize:'.73rem',color:'#8b86a8'}}>{t}</span>
+            ))}
+          </div>
+        </div>
+      </header>
+
+      {/* ── TAB NAV ── */}
+      <nav style={{borderBottom:'1px solid #1a1542',background:'#09071a',position:'sticky',top:0,zIndex:10}}>
+        <div className="tab-scroll" style={{display:'flex',padding:'0 .5rem'}}>
+          {TABS.map(t=>(
+            <button key={t.id} onClick={()=>setTab(t.id)}
+              style={{background:'transparent',border:'none',borderBottom:`2px solid ${tab===t.id?'#13d6c1':'transparent'}`,
+                color:tab===t.id?'#13d6c1':'#8b86a8',padding:'.72rem .8rem',cursor:'pointer',
+                fontFamily:'Sora, sans-serif',fontSize:'.77rem',fontWeight:tab===t.id?700:400,
+                whiteSpace:'nowrap',transition:'all .17s',display:'flex',alignItems:'center',gap:'.3rem'}}>
+              <span style={{fontSize:'.88rem'}}>{t.icon}</span>{t.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      {/* ── MAIN CONTENT ── */}
+      <main style={{maxWidth:'860px',margin:'0 auto',padding:'2rem 1rem'}}>
+        {renderTab()}
+      </main>
+
+      {/* ── QUIZ (rendered after tabs) ── */}
+      {typeof QuizSection !== 'undefined' && <QuizSection/>}
+
+      {/* ── FOOTER ── */}
+      <footer style={{borderTop:'1px solid #1a1542',padding:'1.2rem 1rem',textAlign:'center',marginTop:'2rem'}}>
+        <p style={{color:'#3a3660',fontSize:'.77rem',fontFamily:'DM Mono, monospace'}}>
+          © 2026 Valesca Bravo — Interactive Lab
+          <span style={{margin:'0 .55rem',color:'#1e1b46'}}>·</span>
+          <a href="https://valescabravo.github.io/" style={{color:'#13d6c1',textDecoration:'none'}}>Portfolio</a>
+        </p>
+      </footer>
+    </>
+  );
+}
+
+function Placeholder({ name }) {
+  return (
+    <div className="fade-up" style={{textAlign:'center',padding:'3rem 1rem',color:'#504d70'}}>
+      <div style={{fontSize:'2rem',marginBottom:'.5rem'}}>⏳</div>
+      <p style={{fontFamily:'DM Mono, monospace',fontSize:'.82rem'}}>Módulo "{name}" — en construcción</p>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
