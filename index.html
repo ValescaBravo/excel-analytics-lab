@@ -1240,7 +1240,7 @@ function App() {
       {/* ── HERO ── */}
       <header style={{background:'linear-gradient(165deg,#09071a 0%,#14094e 55%,#09071a 100%)',borderBottom:'1px solid #1e1b46',padding:'2.5rem 1rem 2rem',textAlign:'center',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(circle at 1px 1px,#1a1542 1px,transparent 0)',backgroundSize:'28px 28px',opacity:.3,pointerEvents:'none'}}/>
-        <div style={{position:'relative',maxWidth:'740px',margin:'0 auto'}}>
+        <div style={{position:'relative',maxWidth:'860px',margin:'0 auto'}}>
           <div style={{display:'flex',justifyContent:'center',gap:'.65rem',flexWrap:'wrap',marginBottom:'1.2rem'}}>
             {[
               {href:'https://valescabravo.github.io/',     label:'← Back to Portfolio'},
@@ -1274,6 +1274,7 @@ function App() {
 
       {/* ── TAB NAV ── */}
       <nav style={{borderBottom:'1px solid #1a1542',background:'#09071a',position:'sticky',top:0,zIndex:10}}>
+        <div style={{maxWidth:'860px',margin:'0 auto'}}>
         <div className="tab-scroll" style={{display:'flex',padding:'0 .5rem'}}>
           {TABS.map(t=>(
             <button key={t.id} onClick={()=>setTab(t.id)}
@@ -1284,6 +1285,7 @@ function App() {
               <span style={{fontSize:'.88rem'}}>{t.icon}</span>{t.label}
             </button>
           ))}
+        </div>
         </div>
       </nav>
 
