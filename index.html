@@ -1240,23 +1240,20 @@ function App() {
       {/* ── HERO ── */}
       <header style={{background:'linear-gradient(165deg,#09071a 0%,#14094e 55%,#09071a 100%)',borderBottom:'1px solid #1e1b46',padding:'2.5rem 1rem 2rem',textAlign:'center',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(circle at 1px 1px,#1a1542 1px,transparent 0)',backgroundSize:'28px 28px',opacity:.3,pointerEvents:'none'}}/>
-        <div style={{position:'relative',maxWidth:'740px',margin:'0 auto'}}>
-          <a href="https://valescabravo.github.io/"
-            style={{display:'inline-flex',alignItems:'center',gap:'.4rem',color:'#8b86a8',fontSize:'.77rem',textDecoration:'none',border:'1px solid #1e1b46',borderRadius:'6px',padding:'.28rem .65rem',marginBottom:'1.2rem',transition:'all .17s'}}
-            onMouseOver={e=>{e.currentTarget.style.borderColor='#13d6c1';e.currentTarget.style.color='#e8e6f0'}}
-            onMouseOut={e=>{e.currentTarget.style.borderColor='#1e1b46';e.currentTarget.style.color='#8b86a8'}}>
-            ← Back to Portfolio
-          </a>
-		  <a href="https://valescabravo.github.io/lab"
-            style={{display:'inline-flex',alignItems:'center',gap:'.4rem',color:'#8b86a8',fontSize:'.77rem',textDecoration:'none',border:'1px solid #1e1b46',borderRadius:'6px',padding:'.28rem .65rem',marginBottom:'1.2rem',transition:'all .17s'}}
-            onMouseOver={e=>{e.currentTarget.style.borderColor='#13d6c1';e.currentTarget.style.color='#e8e6f0'}}
-            onMouseOut={e=>{e.currentTarget.style.borderColor='#1e1b46';e.currentTarget.style.color='#8b86a8'}}>
-            ← Back to the Lab
-          </a>
-          <div style={{display:'flex',justifyContent:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
-            <Badge text="2026" color="teal"/>
-            <Badge text="Interactive Lab" color="navy"/>
-          </div>
+		<div style="display:flex;justify-content:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap">
+ 		 <a href="https://valescabravo.github.io/"
+     style="display:inline-flex;align-items:center;gap:.4rem;color:#8b86a8;font-size:.77rem;text-decoration:none;border:1px solid #1e1b46;border-radius:6px;padding:.28rem .85rem;transition:all .17s"
+     onMouseOver={e=>{e.currentTarget.style.borderColor='#13d6c1';e.currentTarget.style.color='#e8e6f0'}}
+     onMouseOut={e=>{e.currentTarget.style.borderColor='#1e1b46';e.currentTarget.style.color='#8b86a8'}}>
+    ← Back to Portfolio
+ 		 </a>
+ 		 <a href="https://valescabravo.github.io/lab"
+     style="display:inline-flex;align-items:center;gap:.4rem;color:#8b86a8;font-size:.77rem;text-decoration:none;border:1px solid #1e1b46;border-radius:6px;padding:.28rem .85rem;transition:all .17s"
+     onMouseOver={e=>{e.currentTarget.style.borderColor='#13d6c1';e.currentTarget.style.color='#e8e6f0'}}
+     onMouseOut={e=>{e.currentTarget.style.borderColor='#1e1b46';e.currentTarget.style.color='#8b86a8'}}>
+    ← Back to the Lab
+ 		 </a>
+		</div>  
           <h1 style={{fontSize:'clamp(1.7rem,5vw,2.75rem)',fontWeight:800,color:'#e8e6f0',letterSpacing:'-.02em',lineHeight:1.15,marginBottom:'.6rem'}}>
             Excel<span style={{color:'#13d6c1'}}> Analytics</span> Lab
           </h1>
