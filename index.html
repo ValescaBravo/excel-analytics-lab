@@ -8,11 +8,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-KHLN3NSD');</script>
 <!-- End Google Tag Manager -->
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Excel Analytics Lab — Valesca Bravo 2026</title>
   
-  <!-- ✅ CDN estables para React 18 -->
+  <!-- ✅ Stable CDN for React 18 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
@@ -94,6 +95,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHLN3NSD"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+  
 <div id="root"></div>
 <script type="text/babel">
 const { useState } = React;
@@ -168,7 +170,7 @@ function Analogy({ icon='🎯', text }) {
   return <div className="analogy-box"><span style={{marginRight:'.4rem'}}>{icon}</span>{text}</div>;
 }
 function Err({ text }) {
-  return <div className="error-box" style={{marginTop:'.6rem'}}><strong style={{marginRight:'.4rem'}}>⚠ Error común:</strong>{text}</div>;
+  return <div className="error-box" style={{marginTop:'.6rem'}}><strong style={{marginRight:'.4rem'}}>⚠ Common error:</strong>{text}</div>;
 }
 function Tip({ text }) {
   return <div className="tip-box" style={{marginTop:'.6rem'}}><strong style={{marginRight:'.4rem'}}>✓ Tip:</strong>{text}</div>;
@@ -176,7 +178,7 @@ function Tip({ text }) {
 
 /* FormulaCard — renders one formula block from a data object */
 function FormulaCard({ d }) {
-  const dc = {teal:'teal',esencial:'teal',intermedio:'orange',avanzado:'red',m365:'yellow',fechas:'navy',interactividad:'teal',segmentación:'green'}[(d.diff||'').toLowerCase()]||'teal';
+  const dc = {teal:'teal',foundational:'teal',intermediate:'orange',advanced:'red',m365:'yellow',dates:'navy',interactivity:'teal',segmentation:'green'}[(d.diff||'').toLowerCase()]||'teal';
   return (
     <div className="card" style={{marginBottom:'1.5rem'}}>
       <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
@@ -185,7 +187,7 @@ function FormulaCard({ d }) {
         <div style={{marginLeft:'auto'}}>{d.diff && <Badge text={d.diff} color={dc}/>}</div>
       </div>
       <Analogy icon={d.icon} text={d.analogy}/>
-      <div style={{marginBottom:'.82rem'}}><Code code={d.code} label="Sintaxis y ejemplo"/></div>
+      <div style={{marginBottom:'.82rem'}}><Code code={d.code} label="Syntax & Example"/></div>
       {d.table && <div style={{marginBottom:'.82rem'}}><DT {...d.table}/></div>}
       {d.error && <Err text={d.error}/>}
       {d.tip   && <Tip text={d.tip}/>}
@@ -194,102 +196,98 @@ function FormulaCard({ d }) {
 }
 
 /* ═══════════════════════════════════════════════
-   TAB CONTENT PLACEHOLDERS (filled per phase)
-═══════════════════════════════════════════════ */
-/* ═══════════════════════════════════════════════
-   PHASE 2 — FOUNDATIONS · LOOKUP · STATS
+   TAB 1: FOUNDATIONS
 ═══════════════════════════════════════════════ */
 
-/* ── TAB 1: FOUNDATIONS ── */
 const FOUND_FORMULAS = [
   {
-    name:'Tablas estructuradas',tag:'Ctrl+T — la base de todo',diff:'Fundamental',icon:'🗃️',
-    analogy:'Una tabla estructurada es como una base de datos local en Excel. A diferencia de un rango, tiene nombre propio, encabezados fijos y se expande sola cuando agregas filas. Las fórmulas que la referencian se actualizan automáticamente.',
-    code:`// Convertir rango a tabla: Ctrl+T → asignar nombre descriptivo
-// Referencias estructuradas:
-=SUM(Ventas[Revenue])              // suma toda la columna
-=COUNTIF(Campanas[Status],"Won")   // filtra por condición
-=AVERAGE(Campanas[ROAS])           // promedio sin fijar rango
+    name:'Structured Tables',tag:'Ctrl+T — the foundation of everything',diff:'Foundational',icon:'🗃️',
+    analogy:'A structured table is like a local database in Excel. Unlike a range, it has its own name, fixed headers, and auto-expands when you add rows. Formulas that reference it update automatically.',
+    code:`// Convert range to table: Ctrl+T → assign a descriptive name
+// Structured references:
+=SUM(Sales[Revenue])              // sums entire column
+=COUNTIF(Campaigns[Status],"Won") // filter by condition
+=AVERAGE(Campaigns[ROAS])         // average without fixed range
 
-// La referencia Campanas[ROAS] se expande con los datos.
-// Un rango fijo como C2:C100 NO lo hace.`,
+// Campaigns[ROAS] expands automatically with data.
+// A fixed range like C2:C100 DOES NOT.`,
     table:{
-      headers:['Rango normal','Tabla estructurada'],
+      headers:['Normal Range','Structured Table'],
       rows:[
-        ['=SUM(B2:B100) — se rompe al agregar filas','=SUM(Ventas[Revenue]) — auto-expandible'],
-        ['Referencias opacas ($C$2:$C$200)','Nombres descriptivos en las fórmulas'],
-        ['Ordenar puede romper otras fórmulas','Integración nativa con Power Query y pivots'],
+        ['=SUM(B2:B100) — breaks when adding rows','=SUM(Sales[Revenue]) — auto-expanding'],
+        ['Opaque references ($C$2:$C$200)','Descriptive names in formulas'],
+        ['Sorting can break other formulas','Native integration with Power Query and Pivots'],
       ]
     },
-    tip:'Ctrl+T desde cualquier rango. Nombra la tabla en Diseño > Nombre de tabla. Nunca dejes el nombre genérico Tabla1.'
+    tip:'Ctrl+T from any range. Name the table in Design > Table Name. Never leave the generic name Table1.'
   },
   {
-    name:'Nombres de rango',tag:'Legibilidad y mantenibilidad',diff:'Esencial',icon:'📖',
-    analogy:'Un nombre de rango es como guardar un contacto en el teléfono: en vez de marcar +353-01-234-5678 escribes "Oficina". En Excel, en vez de $C$2:$C$500 escribes Presupuesto. Las fórmulas se vuelven legibles para cualquier persona del equipo.',
-    code:`// Definir: Fórmulas > Administrador de nombres
-// O: seleccionar rango → escribir nombre en el Cuadro de nombres
+    name:'Named Ranges',tag:'Readability & maintainability',diff:'Foundational',icon:'📖',
+    analogy:'A named range is like saving a contact in your phone: instead of dialing +353-01-234-5678 you type "Office". In Excel, instead of $C$2:$C$500 you type Budget. Formulas become readable by anyone on the team.',
+    code:`// Define: Formulas > Name Manager
+// Or: select range → type name in the Name Box
 
-// Sin nombre (opaco):
+// Without names (opaque):
 =SUMIF($A$2:$A$500,"Q1",$C$2:$C$500)
 
-// Con nombre (legible):
-=SUMIF(Trimestre,"Q1",Presupuesto)
+// With names (readable):
+=SUMIF(Quarter,"Q1",Budget)
 
-// Nombre dinámico con OFFSET (crece con los datos):
+// Dynamic name with OFFSET (grows with data):
 =OFFSET(Sheet1!$A$1, 0, 0, COUNTA(Sheet1!$A:$A), 1)`,
-    error:'No uses espacios ni caracteres especiales. Usa_guiones_bajos o CamelCase. Los nombres son globales por defecto — en archivos con múltiples hojas similares pueden colisionar.'
+    error:'Avoid spaces and special characters. Use underscores or CamelCase. Names are global by default — in files with multiple sheets, they can collide.'
   },
   {
-    name:'Tipos de datos y el error silencioso',tag:'El diagnóstico previo',diff:'Diagnóstico',icon:'🔢',
-    analogy:'Cuando importas un CSV, los números suelen llegar como texto. Tu SUM devuelve 0, tu ordenamiento es alfabético en vez de numérico y nadie sabe por qué el reporte está mal. Es el error más común y más invisible en análisis corporativo.',
-    code:`// Detectar texto disfrazado de número:
-=ISNUMBER(A2)          // FALSE = es texto aunque se vea como número
-=LEN(TRIM(A2))<>LEN(A2) // TRUE = hay espacios ocultos
+    name:'Data Types & The Silent Error',tag:'Diagnose before you analyse',diff:'Diagnostic',icon:'🔢',
+    analogy:'When you import a CSV, numbers often arrive as text. Your SUM returns 0, your sorting is alphabetical instead of numerical, and nobody knows why the report is wrong. It\'s the most common and most invisible error in corporate analysis.',
+    code:`// Detect text disguised as numbers:
+=ISNUMBER(A2)          // FALSE = it's text even if it looks like a number
+=LEN(TRIM(A2))<>LEN(A2) // TRUE = hidden spaces
 
-// Convertir texto a número:
-=VALUE(TRIM(A2))       // TRIM elimina espacios, VALUE convierte
-=A2*1                  // multiplicar por 1 fuerza la conversión
-=--A2                  // doble negación — equivalente compacto
+// Convert text to number:
+=VALUE(TRIM(A2))       // TRIM removes spaces, VALUE converts
+=A2*1                  // multiplying by 1 forces conversion
+=--A2                  // double negation — compact equivalent
 
-// Las fechas reales son números seriales en Excel:
-// 1 ene 1900 = 1 / abr 2026 ≈ 45773
-=ISNUMBER(A2)          // una fecha real devuelve TRUE`,
+// Real dates are serial numbers in Excel:
+// 1 Jan 1900 = 1 / Apr 2026 ≈ 45773
+=ISNUMBER(A2)          // a real date returns TRUE`,
     table:{
-      headers:['Valor visible','Tipo real','SUM','SORT'],
+      headers:['Visible Value','Actual Type','SUM','SORT'],
       rows:[
-        ['"100" (texto)','Texto','0','100 antes que 20 (alfabético)'],
-        ['100 (número)','Número','100','Correcto (numérico)'],
-        ['"2026-04-25" (texto)','Texto','Error en date math','Orden lexicográfico'],
-        ['45773 (serial)','Fecha/Número','45773','Cronológico correcto'],
+        ['"100" (text)','Text','0','100 before 20 (alphabetical)'],
+        ['100 (number)','Number','100','Correct (numerical)'],
+        ['"2026-04-25" (text)','Text','Error in date math','Lexicographic order'],
+        ['45773 (serial)','Date/Number','45773','Correct chronological order'],
       ]
     }
   },
   {
-    name:'Reglas de higiene de datos',tag:'Lo que rompe silenciosamente el análisis',diff:'Crítico',icon:'🚫',
-    analogy:'Mezclar datos con formato es como escribir tus contratos en el mismo papel que las notas de reunión. Parece eficiente hasta que alguien ejecuta un FILTER o una tabla dinámica — y entonces todo colapsa.',
-    code:`// Las celdas combinadas son el enemigo del análisis:
-// → Rompen FILTER, tablas dinámicas y Power Query
-// → Solución: usar una columna de categoría separada
+    name:'Data Hygiene Rules',tag:'What silently breaks analysis',diff:'Critical',icon:'🚫',
+    analogy:'Mixing data with formatting is like writing your contracts on the same paper as meeting notes. It seems efficient until someone runs a FILTER or Pivot Table — then everything collapses.',
+    code:`// Merged cells are the enemy of analysis:
+// → They break FILTER, Pivot Tables, and Power Query
+// → Solution: use a separate category column
 
-// Filas o columnas vacías dentro del dataset:
-// → Excel asume que la tabla termina ahí
-// → Solución: usar "Sin dato" o N/A como valor explícito
+// Empty rows or columns within the dataset:
+// → Excel assumes the table ends there
+// → Solution: use "No data" or N/A as explicit values
 
-// Totales mezclados con datos en la misma columna:
-// → Se suman a sí mismos en agregaciones
-// → Solución: calcular totales en celdas de resumen separadas
+// Totals mixed with data in the same column:
+// → They get summed into themselves
+// → Solution: calculate totals in separate summary cells
 
-// Colores como única señal de categoría:
-// → Fórmulas y Power Query no leen formato, solo valores
-// → Solución: agregar columna de texto con la categoría`,
+// Colour as the only signal of categorisation:
+// → Formulas and Power Query don't read formatting, only values
+// → Solution: add a text column with the category`,
     table:{
-      headers:['Nunca hacer','Alternativa'],
+      headers:['Never Do','Alternative'],
       rows:[
-        ['Celdas combinadas en datasets','Columna de categoría separada'],
-        ['Filas/columnas vacías en medio del rango','Usar "Sin dato" como valor explícito'],
-        ['Totales dentro del mismo dataset','Celdas de resumen fuera de la tabla'],
-        ['Colores como única categorización','Columna de texto con el valor'],
-        ['Comentarios en celdas de datos','Columna "Notas" al dataset'],
+        ['Merged cells in datasets','Separate category column'],
+        ['Empty rows/columns within the range','Use "No data" as explicit value'],
+        ['Totals inside the same dataset','Summary cells outside the table'],
+        ['Colours as the only categorisation','Text column with the value'],
+        ['Comments in data cells','"Notes" column in the dataset'],
       ]
     }
   },
@@ -298,30 +296,30 @@ const FOUND_FORMULAS = [
 function FoundationsTab() {
   return (
     <div className="fade-up">
-      <SH2 title="Fundamentos analíticos" sub="Antes de cualquier fórmula, la estructura de los datos lo determina todo."/>
+      <SH2 title="Analytical Foundations" sub="Before any formula, data structure determines everything."/>
       {FOUND_FORMULAS.map(d => <FormulaCard key={d.name} d={d}/>)}
 
-      <SH2 title="¿Cuándo usar Excel, Python o Power BI?" sub="Criterios objetivos — sin fanáticos de ninguna herramienta."/>
+      <SH2 title="When to Use Excel, Python, or Power BI?" sub="Objective criteria — no tool fanaticism."/>
       <div style={{overflowX:'auto',borderRadius:'12px',border:'1px solid #1e1b46',marginBottom:'1.25rem'}}>
         <table style={{width:'100%',borderCollapse:'collapse',fontSize:'.77rem'}}>
           <thead>
             <tr style={{background:'#0d0b22'}}>
-              {['Criterio','📊 Excel','🐍 Python','⚡ Power BI'].map((h,i)=>(
+              {['Criteria','📊 Excel','🐍 Python','⚡ Power BI'].map((h,i)=>(
                 <th key={h} style={{padding:'.58rem .82rem',textAlign:i===0?'left':'center',color:['#8b86a8','#4ec9b0','#dcdcaa','#fb923c'][i],fontSize:'.68rem',letterSpacing:'.07em',textTransform:'uppercase',fontWeight:700}}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {[
-              ['Volumen de datos','< 500K filas','Sin límite práctico','< 1B filas (modelo)'],
-              ['Audiencia','Cualquier usuario','Devs / analistas','Usuarios de negocio'],
-              ['Automatización','Limitada (VBA)','Total (CI/CD, APIs)','Moderada (refresh)'],
-              ['Código requerido','No','Sí','Mínimo (M y DAX)'],
-              ['Curva de aprendizaje','Baja','Alta','Media'],
-              ['Colaboración','OneDrive / SharePoint','Git / GitHub','Power BI Service'],
-              ['Costo','Incluido en M365','Gratuito','~$10/usuario/mes'],
-              ['Exploración ad-hoc','★★★★★','★★★☆☆','★★★☆☆'],
-              ['Dashboards interactivos','★★☆☆☆','★★★☆☆','★★★★★'],
+              ['Data Volume','< 500K rows','Unlimited','< 1B rows (model)'],
+              ['Audience','Any user','Devs / analysts','Business users'],
+              ['Automation','Limited (VBA)','Full (CI/CD, APIs)','Moderate (refresh)'],
+              ['Code required','No','Yes','Minimal (M and DAX)'],
+              ['Learning curve','Low','High','Medium'],
+              ['Collaboration','OneDrive / SharePoint','Git / GitHub','Power BI Service'],
+              ['Cost','Included in M365','Free','~$10/user/month'],
+              ['Ad-hoc exploration','★★★★★','★★★☆☆','★★★☆☆'],
+              ['Interactive dashboards','★★☆☆☆','★★★☆☆','★★★★★'],
               ['Machine Learning','★☆☆☆☆','★★★★★','★★☆☆☆'],
             ].map(([criterio,...vals],i)=>(
               <tr key={criterio} style={{background:i%2===0?'transparent':'rgba(29,8,94,.07)'}}>
@@ -336,9 +334,9 @@ function FoundationsTab() {
       </div>
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(215px,1fr))',gap:'1rem'}}>
         {[
-          {color:'#4ec9b0',title:'Usa Excel cuando…',items:['Datos < 500K filas','Audiencia sin herramientas especiales','Análisis ad-hoc o frecuencia semanal','Solo tienes acceso a M365']},
-          {color:'#dcdcaa',title:'Usa Python cuando…',items:['Automatización total o APIs','Datos > 1M filas','Machine learning o estadística avanzada','El output es un sistema, no un reporte']},
-          {color:'#fb923c',title:'Usa Power BI cuando…',items:['Múltiples fuentes que se actualizan solas','KPIs estandarizados con drill-down','Audiencia amplia sin habilidades técnicas','Presupuesto para licencias Pro']},
+          {color:'#4ec9b0',title:'Use Excel when…',items:['Data < 500K rows','Audience has no specialised tools','Ad-hoc or weekly analysis','Only M365 access available']},
+          {color:'#dcdcaa',title:'Use Python when…',items:['Full automation or APIs','Data > 1M rows','Machine learning or advanced stats','Output is a system, not a report']},
+          {color:'#fb923c',title:'Use Power BI when…',items:['Multiple sources that refresh automatically','Standardised KPIs with drill-down','Wide audience with no technical skills','Budget for Pro licences']},
         ].map(({color,title,items})=>(
           <div key={title} className="card" style={{borderColor:`${color}33`}}>
             <h4 style={{color,fontWeight:700,fontSize:'.83rem',marginBottom:'.6rem'}}>{title}</h4>
@@ -354,304 +352,311 @@ function FoundationsTab() {
   );
 }
 
-/* ── TAB 2: LOOKUP ── */
+/* ═══════════════════════════════════════════════
+   TAB 2: LOOKUP
+═══════════════════════════════════════════════ */
+
 const LOOKUP_DATA = [
   {
-    name:'XLOOKUP',tag:'El sucesor moderno de VLOOKUP',diff:'Esencial',icon:'🔍',
-    analogy:'XLOOKUP es como la búsqueda de Google para tus tablas: le das lo que buscas, dónde buscar y qué devolver. Y puedes decirle exactamente qué mostrar cuando no encuentra nada. Sin restricciones de columnas, busca en cualquier dirección.',
-    code:`// Buscar email de cliente por su ID:
-=XLOOKUP(B2, Clientes[ID], Clientes[Email], "No encontrado")
+    name:'XLOOKUP',tag:'Modern replacement for VLOOKUP',diff:'Foundational',icon:'🔍',
+    analogy:'XLOOKUP is like Google Search for your tables: you tell it what you\'re looking for, where to look, and what to return. You can also tell it exactly what to show when nothing is found. No column restrictions — it searches in any direction.',
+    code:`// Find customer email by ID:
+=XLOOKUP(B2, Customers[ID], Customers[Email], "Not found")
 
-// Devolver múltiples columnas a la vez:
-=XLOOKUP(B2, Clientes[ID], Clientes[[Nombre]:[Email]:[Segmento]])
+// Return multiple columns at once:
+=XLOOKUP(B2, Customers[ID], Customers[[Name]:[Email]:[Segment]])
 
-// Buscar el registro MÁS RECIENTE (search_mode=-1):
-=XLOOKUP(B2, Pedidos[Cliente], Pedidos[Fecha], , 0, -1)
+// Find the MOST RECENT record (search_mode=-1):
+=XLOOKUP(B2, Orders[Customer], Orders[Date], , 0, -1)
 
-// Argumentos: lookup_value, lookup_array, return_array,
+// Arguments: lookup_value, lookup_array, return_array,
 //             [if_not_found], [match_mode], [search_mode]`,
-    table:{headers:['ID_Cliente','Nombre','Email','Segmento'],rows:[['C001','Ana Martínez','ana@brand.ie','Premium'],['C002','Luis García','luis@brand.ie','Standard'],['C003','Sara López','sara@brand.ie','Premium']],result:'XLOOKUP("C002", ID, Email) → luis@brand.ie'},
-    error:'No requiere que la columna de búsqueda sea la primera — VLOOKUP sí lo exige. Si sigues usando VLOOKUP en 2026, es el momento de migrar.',
-    tip:'match_mode=-1 busca el valor igual o inferior más grande — útil para tablas de descuento por tramos. match_mode=0 (exacto) es el default.'
+    table:{headers:['Customer_ID','Name','Email','Segment'],rows:[['C001','Ana Martínez','ana@brand.ie','Premium'],['C002','Luis García','luis@brand.ie','Standard'],['C003','Sara López','sara@brand.ie','Premium']],result:'XLOOKUP("C002", ID, Email) → luis@brand.ie'},
+    error:'It does not require the lookup column to be the first — VLOOKUP does. If you\'re still using VLOOKUP in 2026, it\'s time to migrate.',
+    tip:'match_mode=-1 finds the largest value equal to or less than the search value — useful for tiered discount tables. match_mode=0 (exact) is the default.'
   },
   {
-    name:'INDEX + MATCH',tag:'La combinación clásica — compatible con todas las versiones',diff:'Esencial',icon:'📚',
-    analogy:'MATCH es como el índice de un libro: te dice en qué página está lo que buscas. INDEX va directamente a esa página y trae el valor. Juntos funcionan en cualquier dirección y en cualquier versión de Excel.',
-    code:`// Encontrar revenue de "Email" en la fila Q2 (lookup bidireccional):
+    name:'INDEX + MATCH',tag:'The classic combo — works in all versions',diff:'Foundational',icon:'📚',
+    analogy:'MATCH is like a book\'s index: it tells you which page contains what you\'re looking for. INDEX goes directly to that page and retrieves the value. Together, they work in any direction and in any version of Excel.',
+    code:`// Find revenue for "Email" in Q2 row (two-way lookup):
 =INDEX(B2:D4, MATCH("Q2",A2:A4,0), MATCH("Email",B1:D1,0))
 
-// Lookup vertical estándar:
-=INDEX(Campanas[Revenue], MATCH(G2, Campanas[Canal], 0))
+// Standard vertical lookup:
+=INDEX(Campaigns[Revenue], MATCH(G2, Campaigns[Channel], 0))
 
-// Dos criterios simultáneos (M365 — sin Ctrl+Shift+Enter):
-=INDEX(Ventas[Monto],
-  MATCH(1, (Ventas[Region]=H2)*(Ventas[Mes]=H3), 0)
+// Two criteria simultaneously (M365 — no Ctrl+Shift+Enter):
+=INDEX(Sales[Amount],
+  MATCH(1, (Sales[Region]=H2)*(Sales[Month]=H3), 0)
 )`,
     table:{headers:['Quarter','Email','Social','Paid Search'],rows:[['Q1','€45,200','€38,100','€52,800'],['Q2','€58,400','€41,200','€61,500'],['Q3','€51,100','€44,800','€55,200']],result:'INDEX(B2:D4, MATCH("Q2",A2:A4,0), MATCH("Email",B1:D1,0)) → €58,400'},
-    error:'El tercer argumento de MATCH debe ser 0 (exacto) casi siempre. El default es 1 (rango ordenado ascendente) — produce resultados silenciosamente incorrectos si los datos no están ordenados.'
+    error:'The third argument of MATCH should be 0 (exact) almost always. The default is 1 (sorted ascending) — it produces silently incorrect results if data isn\'t sorted.'
   },
   {
-    name:'FILTER',tag:'Filtrado dinámico que derrama una tabla completa',diff:'M365',icon:'🎚️',
-    analogy:'FILTER devuelve una tabla con solo las filas que cumplen tu condición. Los resultados se actualizan solos si cambian los datos. No es un filtro de vista — es una fórmula que construye una nueva tabla en tiempo real.',
-    code:`// Campañas con ROAS mayor a 3:
-=FILTER(Campanas, Campanas[ROAS]>3, "Sin resultados")
+    name:'FILTER',tag:'Dynamic filtering that spills a full table',diff:'M365',icon:'🎚️',
+    analogy:'FILTER returns a table with only the rows that meet your condition. Results auto-update if data changes. It\'s not a view filter — it\'s a formula that builds a new table in real time.',
+    code:`// Campaigns with ROAS greater than 3:
+=FILTER(Campaigns, Campaigns[ROAS]>3, "No results")
 
-// Múltiples condiciones: * es AND, + es OR
-=FILTER(Campanas,
-  (Campanas[Canal]="Social") * (Campanas[ROAS]>2.5)
+// Multiple conditions: * is AND, + is OR
+=FILTER(Campaigns,
+  (Campaigns[Channel]="Social") * (Campaigns[ROAS]>2.5)
 )
 
-// Ordenar el resultado con SORT:
-=SORT(FILTER(Campanas, Campanas[Status]="Active"), 3, -1)`,
-    table:{headers:['Campaña','Canal','ROAS','¿Pasa?'],rows:[['Summer Sale','Social','4.2','Sí'],['Brand Awareness','Display','1.8','No'],['Retargeting','Paid Search','5.1','Sí'],['Newsletter Q2','Email','3.7','Sí']],result:'FILTER devuelve: Summer Sale · Retargeting · Newsletter Q2'},
-    error:'Requiere Microsoft 365 o Excel 2021+. Las celdas donde derrama deben estar vacías — si hay datos, aparece el error #SPILL!.'
+// Sort the result with SORT:
+=SORT(FILTER(Campaigns, Campaigns[Status]="Active"), 3, -1)`,
+    table:{headers:['Campaign','Channel','ROAS','Passes?'],rows:[['Summer Sale','Social','4.2','Yes'],['Brand Awareness','Display','1.8','No'],['Retargeting','Paid Search','5.1','Yes'],['Newsletter Q2','Email','3.7','Yes']],result:'FILTER returns: Summer Sale · Retargeting · Newsletter Q2'},
+    error:'Requires Microsoft 365 or Excel 2021+. The cells where it spills must be empty — if there\'s data, you get #SPILL!.'
   },
   {
-    name:'UNIQUE',tag:'Lista sin duplicados — dinámica y auto-actualizable',diff:'M365',icon:'🎟️',
-    analogy:'Como la lista VIP de un evento: no importa cuántas veces aparezca el mismo nombre en el sistema, en la lista final sale una sola vez. Y si agregas registros nuevos, la lista se actualiza sola.',
-    code:`// Lista única de canales activos:
-=UNIQUE(Campanas[Canal])
+    name:'UNIQUE',tag:'Deduplicated list — dynamic and auto-updating',diff:'M365',icon:'🎟️',
+    analogy:'Like a VIP event guest list: no matter how many times the same name appears in the system, it appears only once in the final list. And if you add new records, the list updates automatically.',
+    code:`// Unique list of active channels:
+=UNIQUE(Campaigns[Channel])
 
-// Combinaciones únicas de dos columnas:
-=UNIQUE(Campanas[[Canal]:[Segmento]])
+// Unique combinations of two columns:
+=UNIQUE(Campaigns[[Channel]:[Segment]])
 
-// Solo valores que aparecen exactamente una vez:
-=UNIQUE(Campanas[Canal], FALSE, TRUE)
+// Only values that appear exactly once:
+=UNIQUE(Campaigns[Channel], FALSE, TRUE)
 
-// Lista ordenada de valores únicos:
-=SORT(UNIQUE(Campanas[Canal]))`,
-    table:{headers:['Canal (fuente con duplicados)','→ UNIQUE devuelve'],rows:[['Email','Email'],['Social','Social'],['Email','Paid Search'],['Paid Search','Display'],['Social',''],['Display','']],result:'4 valores únicos en lugar de 6 filas repetidas'},
-    error:'No coloques datos en las celdas debajo de donde escribes UNIQUE — derrama automáticamente hacia abajo. Si hay datos, aparece #SPILL!.'
+// Sorted unique list:
+=SORT(UNIQUE(Campaigns[Channel]))`,
+    table:{headers:['Channel (source with duplicates)','→ UNIQUE returns'],rows:[['Email','Email'],['Social','Social'],['Email','Paid Search'],['Paid Search','Display'],['Social',''],['Display','']],result:'4 unique values instead of 6 repeated rows'},
+    error:'Don\'t place data in the cells below where you write UNIQUE — it automatically spills down. If there\'s data, you get #SPILL!.'
   },
   {
-    name:'SORT / SORTBY',tag:'Ordenar resultados sin tocar los datos originales',diff:'M365',icon:'🏆',
-    analogy:'Como el ranking de clasificación de un torneo que se recalcula solo cuando cambian los resultados. SORT devuelve una copia ordenada — no modifica el dataset original.',
-    code:`// Campañas ordenadas por Revenue descendente:
-=SORT(Campanas[[Campana]:[Revenue]], 3, -1)
+    name:'SORT / SORTBY',tag:'Sort results without touching source data',diff:'M365',icon:'🏆',
+    analogy:'Like a tournament ranking that recalculates when results change. SORT returns a sorted copy — it doesn\'t modify the original dataset.',
+    code:`// Campaigns sorted by Revenue descending:
+=SORT(Campaigns[[Campaign]:[Revenue]], 3, -1)
 
-// SORTBY: ordenar por una columna que no se muestra:
-=SORTBY(Campanas[[Campana]:[Canal]], Campanas[ROAS], -1)
+// SORTBY: sort by a column not shown in the result:
+=SORTBY(Campaigns[[Campaign]:[Channel]], Campaigns[ROAS], -1)
 
-// Múltiples criterios:
-=SORTBY(Tabla, Col_Primaria, -1, Col_Secundaria, 1)
+// Multiple criteria:
+=SORTBY(Table, Primary_Col, -1, Secondary_Col, 1)
 
-// Top 5 campañas por ROAS:
-=TAKE(SORTBY(Campanas, Campanas[ROAS], -1), 5)`,
-    error:'sort_order: 1 = ascendente, -1 = descendente. SORTBY es más flexible que SORT cuando el criterio de orden es una columna diferente a las que muestras en el resultado.'
+// Top 5 campaigns by ROAS:
+=TAKE(SORTBY(Campaigns, Campaigns[ROAS], -1), 5)`,
+    error:'sort_order: 1 = ascending, -1 = descending. SORTBY is more flexible than SORT when the sorting criterion is a different column from what you display.'
   },
 ];
 
 function LookupTab() {
   return (
     <div className="fade-up">
-      <SH2 title="Fórmulas de lookup" sub="Encontrar datos en otra tabla es el 70% del trabajo de un analista."/>
+      <SH2 title="Lookup Formulas" sub="Finding data in another table is 70% of an analyst\'s work."/>
       {LOOKUP_DATA.map(d => <FormulaCard key={d.name} d={d}/>)}
     </div>
   );
 }
 
-/* ── TAB 3: STATS ── */
+/* ═══════════════════════════════════════════════
+   TAB 3: STATISTICS
+═══════════════════════════════════════════════ */
+
 const STATS_DATA = [
   {
-    name:'PERCENTILE.INC',tag:'Posición relativa dentro de la distribución',diff:'Esencial',icon:'📊',
-    analogy:'Si un cliente está en el percentil 90 de LTV, su valor de vida supera al 90% de tus clientes. Los percentiles indican posición relativa, no valor absoluto. Son más robustos que el promedio cuando hay valores extremos.',
-    code:`// Percentil 75 (Q3) del Lifetime Value:
-=PERCENTILE.INC(Clientes[LTV], 0.75)
+    name:'PERCENTILE.INC',tag:'Relative position within distribution',diff:'Foundational',icon:'📊',
+    analogy:'If a customer is at the 90th percentile of LTV, their lifetime value exceeds 90% of your customers. Percentiles indicate relative position, not absolute value. They\'re more robust than averages when there are extreme values.',
+    code:`// 75th percentile (Q3) of Lifetime Value:
+=PERCENTILE.INC(Customers[LTV], 0.75)
 
-// Umbral del top 10% para segmentación premium:
-=PERCENTILE.INC(Clientes[LTV], 0.90)
+// Top 10% threshold for premium segmentation:
+=PERCENTILE.INC(Customers[LTV], 0.90)
 
-// ¿En qué percentil está un cliente específico?
-=PERCENTRANK.INC(Clientes[LTV], A2)   // devuelve 0 a 1
+// What percentile is a specific customer in?
+=PERCENTRANK.INC(Customers[LTV], A2)   // returns 0 to 1
 
-// Rango intercuartílico (IQR = Q3 - Q1):
-=QUARTILE.INC(Clientes[LTV],3) - QUARTILE.INC(Clientes[LTV],1)`,
-    table:{headers:['Cliente','LTV (€)','Percentil'],rows:[['Ana M.','€2,800','P98'],['Luis G.','€1,200','P75'],['Sara L.','€580','P42'],['Pedro T.','€340','P21']],result:'PERCENTILE.INC a 0.75 → €1,190 (umbral del top 25%)'},
-    error:'PERCENTILE.INC incluye los extremos (k=0 y k=1 son válidos). PERCENTILE.EXC los excluye. Para análisis de negocio estándar, usa siempre .INC.'
+// Interquartile range (IQR = Q3 - Q1):
+=QUARTILE.INC(Customers[LTV],3) - QUARTILE.INC(Customers[LTV],1)`,
+    table:{headers:['Customer','LTV (€)','Percentile'],rows:[['Ana M.','€2,800','P98'],['Luis G.','€1,200','P75'],['Sara L.','€580','P42'],['Pedro T.','€340','P21']],result:'PERCENTILE.INC at 0.75 → €1,190 (top 25% threshold)'},
+    error:'PERCENTILE.INC includes the extremes (k=0 and k=1 are valid). PERCENTILE.EXC excludes them. For standard business analysis, always use .INC.'
   },
   {
-    name:'STDEV.S / STDEV.P',tag:'Medir la consistencia o volatilidad de tus métricas',diff:'Esencial',icon:'🎯',
-    analogy:'Si tu revenue semanal es €10K, €10.5K, €9.8K — la STDEV es pequeña y eres consistente. Si es €2K, €18K, €4K, €16K — la STDEV es grande y hay volatilidad. Es la distancia promedio de cada punto a la media.',
-    code:`// Desviación estándar del revenue (muestra):
-=STDEV.S(Ventas[Revenue])
+    name:'STDEV.S / STDEV.P',tag:'Measure consistency or volatility of your metrics',diff:'Foundational',icon:'🎯',
+    analogy:'If your weekly revenue is €10K, €10.5K, €9.8K — STDEV is small and you\'re consistent. If it\'s €2K, €18K, €4K, €16K — STDEV is large and there\'s volatility. It\'s the average distance of each point from the mean.',
+    code:`// Standard deviation of revenue (sample):
+=STDEV.S(Sales[Revenue])
 
-// Coeficiente de variación (variabilidad relativa — más interpretable):
-=STDEV.S(Ventas[Revenue]) / AVERAGE(Ventas[Revenue])
+// Coefficient of variation (relative variability — more interpretable):
+=STDEV.S(Sales[Revenue]) / AVERAGE(Sales[Revenue])
 
-// Z-score: ¿este mes es estadísticamente inusual?
-// Valores > 2 o < -2 son outliers estadísticos
-=(D2 - AVERAGE(Ventas[Revenue])) / STDEV.S(Ventas[Revenue])`,
-    table:{headers:['Semana','Revenue (€)','Z-score','Interpretación'],rows:[['S1','€12,400','0.32','Normal'],['S2','€11,800','-0.21','Normal'],['S3','€9,200','-1.65','Bajo pero normal'],['S4','€18,900','2.91','← Outlier estadístico'],['S5','€12,100','0.09','Normal']],result:'STDEV.S → €3,180 | Media → €12,880'},
-    error:'Usa STDEV.S cuando tienes una muestra (lo habitual). STDEV.P solo cuando tienes todos los datos de la población entera. Confundirlos sub-estima la variabilidad real.'
+// Z-score: is this month statistically unusual?
+// Values > 2 or < -2 are statistical outliers
+=(D2 - AVERAGE(Sales[Revenue])) / STDEV.S(Sales[Revenue])`,
+    table:{headers:['Week','Revenue (€)','Z-score','Interpretation'],rows:[['W1','€12,400','0.32','Normal'],['W2','€11,800','-0.21','Normal'],['W3','€9,200','-1.65','Low but normal'],['W4','€18,900','2.91','← Statistical outlier'],['W5','€12,100','0.09','Normal']],result:'STDEV.S → €3,180 | Mean → €12,880'},
+    error:'Use STDEV.S when you have a sample (the usual case). STDEV.P only when you have the entire population\'s data. Confusing them under-estimates real variability.'
   },
   {
-    name:'CORREL',tag:'¿Dos variables se mueven juntas?',diff:'Intermedio',icon:'📈',
-    analogy:'Si cuando subes el presupuesto de ads tus conversiones también suben consistentemente, hay correlación positiva. Pero correlación no implica causalidad: las ventas de helados correlacionan con ahogamientos en verano — ambas suben por el calor, no porque una cause la otra.',
-    code:`// Correlación entre presupuesto y conversiones:
-=CORREL(Campanas[Presupuesto], Campanas[Conversiones])
+    name:'CORREL',tag:'Do two variables move together?',diff:'Intermediate',icon:'📈',
+    analogy:'If when you increase your ad budget, conversions also consistently increase, there\'s positive correlation. But correlation does not imply causation: ice cream sales correlate with drowning incidents in summer — both rise due to heat, not because one causes the other.',
+    code:`// Correlation between budget and conversions:
+=CORREL(Campaigns[Budget], Campaigns[Conversions])
 
-// Resultado: siempre entre -1 y 1
-// -1 = correlación inversa perfecta
-//  0 = sin relación lineal detectable
-// +1 = correlación directa perfecta
+// Result: always between -1 and 1
+// -1 = perfect inverse correlation
+//  0 = no detectable linear relationship
+// +1 = perfect direct correlation
 
-// Regla práctica para marketing:
-// |r| < 0.3  → débil     |r| 0.3-0.7 → moderada
-// |r| > 0.7  → fuerte    |r| > 0.9   → muy fuerte`,
-    table:{headers:['Variable A','Variable B','r','Interpretación'],rows:[['Presupuesto Paid','Conversiones','0.87','Correlación fuerte'],['Impresiones','Clicks','0.93','Muy fuerte'],['Día del mes','Revenue','0.08','Sin correlación lineal'],['Precio unitario','Tasa conversión','-0.64','Inversa moderada']],result:'CORREL(Presupuesto, Conversiones) → 0.87'},
-    error:'CORREL solo detecta relaciones LINEALES. Dos variables pueden tener una relación fuerte no lineal y CORREL devolverá un valor bajo. Visualiza siempre el scatter plot antes de concluir.'
+// Rule of thumb for marketing:
+// |r| < 0.3  → weak     |r| 0.3-0.7 → moderate
+// |r| > 0.7  → strong   |r| > 0.9   → very strong`,
+    table:{headers:['Variable A','Variable B','r','Interpretation'],rows:[['Paid Budget','Conversions','0.87','Strong correlation'],['Impressions','Clicks','0.93','Very strong'],['Day of month','Revenue','0.08','No linear correlation'],['Unit price','Conversion rate','-0.64','Moderate inverse']],result:'CORREL(Budget, Conversions) → 0.87'},
+    error:'CORREL only detects LINEAR relationships. Two variables can have a strong non-linear relationship and CORREL will return a low value. Always visualise the scatter plot before concluding.'
   },
   {
-    name:'LINEST',tag:'Regresión lineal — la línea de mejor ajuste',diff:'Avanzado',icon:'📐',
-    analogy:'Imagina los puntos de un gráfico: presupuesto en X, revenue en Y. LINEST traza la mejor línea recta que los atraviesa. Te da la pendiente (cuánto sube el revenue por cada euro invertido) y el R² (qué tan bien explica el modelo los datos reales).',
-    code:`// En M365 (derrama automáticamente — seleccionar rango 2x2+):
-=LINEST(Campanas[Revenue], Campanas[Presupuesto], TRUE, TRUE)
-// Fila 1: pendiente, intercepto
-// Fila 3: R², error estándar de la regresión
+    name:'LINEST',tag:'Linear regression — the line of best fit',diff:'Advanced',icon:'📐',
+    analogy:'Imagine a scatter plot: budget on X, revenue on Y. LINEST draws the best straight line through the points. It gives you the slope (how much revenue increases per euro spent) and R² (how well the model explains actual data).',
+    code:`// In M365 (spills automatically — select 2x2+ range):
+=LINEST(Campaigns[Revenue], Campaigns[Budget], TRUE, TRUE)
+// Row 1: slope, intercept
+// Row 3: R², standard error of regression
 
-// Predicción con FORECAST.LINEAR (más sencillo):
-=FORECAST.LINEAR(50000, Campanas[Revenue], Campanas[Presupuesto])
+// Prediction with FORECAST.LINEAR (simpler):
+=FORECAST.LINEAR(50000, Campaigns[Revenue], Campaigns[Budget])
 
-// R² como función independiente:
-=RSQ(Campanas[Revenue], Campanas[Presupuesto])
-// 0.92 → el modelo explica el 92% de la varianza del revenue`,
-    table:{headers:['Presupuesto (€)','Revenue (€)','Predicho','Residuo'],rows:[['€5,000','€18,200','€17,800','€400'],['€10,000','€34,500','€33,600','€900'],['€15,000','€48,100','€49,400','-€1,300'],['€20,000','€65,800','€65,200','€600']],result:'R² = 0.996 | Pendiente: €3.16 de revenue por cada € invertido'},
-    error:'Verifica el R² antes de usar el modelo. Un R² < 0.6 indica que el modelo lineal no es adecuado para esos datos. Valida también con un scatter plot.'
+// R² as a standalone function:
+=RSQ(Campaigns[Revenue], Campaigns[Budget])
+// 0.92 → the model explains 92% of revenue variance`,
+    table:{headers:['Budget (€)','Revenue (€)','Predicted','Residual'],rows:[['€5,000','€18,200','€17,800','€400'],['€10,000','€34,500','€33,600','€900'],['€15,000','€48,100','€49,400','-€1,300'],['€20,000','€65,800','€65,200','€600']],result:'R² = 0.996 | Slope: €3.16 revenue per €1 invested'},
+    error:'Check R² before using the model. An R² < 0.6 indicates the linear model isn\'t suitable for that data. Also validate with a scatter plot.'
   },
   {
-    name:'NORM.DIST',tag:'Probabilidad bajo la distribución normal',diff:'Avanzado',icon:'🔔',
-    analogy:'Si tu revenue mensual tiene media €85K y desviación estándar €12K, NORM.DIST te dice la probabilidad de que el próximo mes sea menor a €100K. Convierte la campana de Gauss en un número útil para fijar targets con base estadística, no intuición.',
-    code:`// P(revenue < €100K) dado μ=85K, σ=12K:
+    name:'NORM.DIST',tag:'Probability under the normal distribution',diff:'Advanced',icon:'🔔',
+    analogy:'If your monthly revenue has a mean of €85K and standard deviation of €12K, NORM.DIST tells you the probability that next month will be below €100K. It turns the Gaussian bell curve into a useful number for setting targets based on statistics, not intuition.',
+    code:`// P(revenue < €100K) given μ=85K, σ=12K:
 =NORM.DIST(100000, 85000, 12000, TRUE)   // → 0.894 = 89.4%
 
-// P(revenue entre €75K y €95K):
+// P(revenue between €75K and €95K):
 =NORM.DIST(95000,85000,12000,TRUE) - NORM.DIST(75000,85000,12000,TRUE)
 
-// Target para el percentil 90 de revenue (función inversa):
+// Target for the 90th percentile of revenue (inverse function):
 =NORM.INV(0.90, 85000, 12000)
-// → €100,378 = valor que se supera solo el 10% del tiempo`,
-    table:{headers:['Target Revenue','P(Revenue < Target)','Lectura de negocio'],rows:[['€70,000','21.2%','Conservador — fácil de alcanzar'],['€85,000','50.0%','Igual a la media histórica'],['€100,000','89.4%','Ambicioso'],['€110,000','97.3%','Muy difícil de superar']],result:'NORM.INV(0.50, 85000, 12000) → €85,000 (la media)'},
-    error:'cumulative=TRUE devuelve probabilidad acumulada (lo que necesitas para análisis). cumulative=FALSE devuelve densidad (para graficar la campana). Confundirlos da números que parecen válidos pero no lo son.'
+// → €100,378 = value exceeded only 10% of the time`,
+    table:{headers:['Target Revenue','P(Revenue < Target)','Business interpretation'],rows:[['€70,000','21.2%','Conservative — easy to hit'],['€85,000','50.0%','Equal to historical mean'],['€100,000','89.4%','Ambitious'],['€110,000','97.3%','Very hard to exceed']],result:'NORM.INV(0.50, 85000, 12000) → €85,000 (the mean)'},
+    error:'cumulative=TRUE returns cumulative probability (what you need for analysis). cumulative=FALSE returns density (for plotting the bell curve). Confusing them gives numbers that look valid but aren\'t.'
   },
 ];
 
 function StatsTab() {
   return (
     <div className="fade-up">
-      <SH2 title="Análisis estadístico" sub="Excel tiene más estadística de la que la mayoría usa. Aquí la que necesita un analista de negocio."/>
+      <SH2 title="Statistical Analysis" sub="Excel has more statistics than most people use. Here\'s what a business analyst actually needs."/>
       {STATS_DATA.map(d => <FormulaCard key={d.name} d={d}/>)}
     </div>
   );
 }
+
 /* ═══════════════════════════════════════════════
-   PHASE 3 — POWER QUERY · TABLAS DINÁMICAS
+   TAB 4: POWER QUERY
 ═══════════════════════════════════════════════ */
 
 const PQ_STEPS = [
   {
-    n:'01', title:'Conectar a fuentes de datos',
-    desc:'Power Query se conecta a CSV, Excel, SQL, APIs web, SharePoint y más — sin una línea de código.',
-    code:`// Datos > Obtener datos > Desde archivo / Base de datos / Web
+    n:'01', title:'Connect to data sources',
+    desc:'Power Query connects to CSV, Excel, SQL, web APIs, SharePoint and more — without writing a single line of code.',
+    code:`// Data > Get Data > From File / Database / Web
 
-// CSV de CRM:
-Datos > Obtener datos > Desde archivo > Texto/CSV
+// CSV from CRM:
+Data > Get Data > From File > Text/CSV
 
-// API web (retorna JSON):
-Datos > Obtener datos > Desde otras fuentes > Desde web
+// Web API (returns JSON):
+Data > Get Data > From Other Sources > From Web
 // URL: https://api.example.com/campaigns?key=TOKEN
 
-// Google Sheets (hoja pública):
-// Archivo > Publicar en la web > formato CSV → usar esa URL`,
-    tip:'Siempre selecciona "Transformar datos" en vez de "Cargar" — así entras al editor antes de que los datos lleguen a tu hoja.'
+// Google Sheets (public sheet):
+// File > Publish to web > CSV format → use that URL`,
+    tip:'Always select "Transform Data" instead of "Load" — this takes you to the editor before data hits your sheet.'
   },
   {
-    n:'02', title:'Limpiar y estandarizar',
-    desc:'Power Query registra cada paso de limpieza como una acción reproducible. La próxima vez que lleguen datos nuevos, un solo clic repite todo el proceso.',
-    code:`// Todas estas operaciones son clics — sin código:
-// 1. Eliminar filas en blanco:
-//    Inicio > Reducir filas > Eliminar filas en blanco
-// 2. Recortar espacios extra:
-//    Clic derecho en columna > Transformar > Recortar
-// 3. Cambiar tipo de datos:
-//    Clic en el icono de tipo en el encabezado de columna
-// 4. Reemplazar valores nulos:
-//    Clic derecho > Reemplazar valores → null → 0
+    n:'02', title:'Clean and standardise',
+    desc:'Power Query records every cleaning step as a reproducible action. Next time new data arrives, one click repeats the entire process.',
+    code:`// All these operations are clicks — no code:
+// 1. Remove blank rows:
+//    Home > Reduce Rows > Remove Blank Rows
+// 2. Trim extra spaces:
+//    Right-click column > Transform > Trim
+// 3. Change data type:
+//    Click the type icon in the column header
+// 4. Replace null values:
+//    Right-click > Replace Values → null → 0
 
-// El M Language equivalente (visible en la barra de fórmulas):
-= Table.TransformColumnTypes(Fuente,{{"Fecha", type date}})
-= Table.ReplaceValue(Paso, null, 0, Replacer.ReplaceValue,{"Revenue"})`,
-    error:'El paso "Tipo detectado" que Power Query agrega automáticamente puede romper la carga si los datos futuros usan un formato diferente. Ajusta los tipos manualmente.'
+// The equivalent M Language (visible in formula bar):
+= Table.TransformColumnTypes(Source,{{"Date", type date}})
+= Table.ReplaceValue(Step, null, 0, Replacer.ReplaceValue,{"Revenue"})`,
+    error:'The "Detected Type" step that Power Query automatically adds can break loading if future data uses a different format. Manually adjust types.'
   },
   {
-    n:'03', title:'Transformar y enriquecer',
-    desc:'Columnas calculadas, pivot, unpivot — Power Query puede reestructurar cualquier forma de datos sin tocar el original.',
-    code:`// Columna calculada personalizada:
-// Agregar columna > Columna personalizada
+    n:'03', title:'Transform and enrich',
+    desc:'Calculated columns, pivot, unpivot — Power Query can restructure any shape of data without touching the original.',
+    code:`// Custom calculated column:
+// Add Column > Custom Column
 = [Revenue] - [Cost]      // Profit
-= [Revenue] / [Clicks]    // Revenue por clic
+= [Revenue] / [Clicks]    // Revenue per click
 
-// Extraer partes de fecha:
-// Agregar columna > Fecha > Año / Mes / Trimestre
+// Extract date parts:
+// Add Column > Date > Year / Quarter / Month
 
-// UNPIVOT — convertir columnas en filas (formato long):
-// Seleccionar columnas > Transformar > Anular dinamización
+// UNPIVOT — convert columns into rows (long format):
+// Select columns > Transform > Unpivot
 
-// Antes:                      Después:
-// Camp | S1 | S2 | S3      Camp | Semana | Valor
-// Email|100 |120 | 95  →   Email| S1     | 100
-// Social|80 | 95 |110      Email| S2     | 120`,
-    tip:'Unpivot es la transformación más importante para análisis de cohortes y series temporales. Las herramientas analíticas necesitan formato "long" (una fila por observación), no "wide" (una columna por período).'
+// Before:                      After:
+// Camp | W1 | W2 | W3      Camp | Week | Value
+// Email|100 |120 | 95  →   Email| W1   | 100
+// Social|80 | 95 |110      Email| W2   | 120`,
+    tip:'Unpivot is the most important transformation for cohort analysis and time series. Analytical tools need "long" format (one row per observation), not "wide" (one column per period).'
   },
   {
-    n:'04', title:'Merge y Append de tablas',
-    desc:'Merge = JOIN por clave (combina columnas). Append = UNION ALL (apila filas). Las dos operaciones de combinación fundamentales.',
-    code:`// MERGE — equivalente a SQL JOIN:
-// Inicio > Combinar > Combinar consultas
-// Tipos: Inner / Left Outer / Right Outer / Full Outer / Anti
+    n:'04', title:'Merge and Append tables',
+    desc:'Merge = JOIN by key (combines columns). Append = UNION ALL (stacks rows). The two fundamental combination operations.',
+    code:`// MERGE — equivalent to SQL JOIN:
+// Home > Combine > Merge Queries
+// Types: Inner / Left Outer / Right Outer / Full Outer / Anti
 
-// APPEND — equivalente a SQL UNION ALL:
-// Inicio > Combinar > Anexar consultas
-// Útil para combinar datos de múltiples meses, regiones, fuentes
+// APPEND — equivalent to SQL UNION ALL:
+// Home > Combine > Append Queries
+// Useful for combining data from multiple months, regions, sources
 
 // M Language:
-= Table.NestedJoin(Campanas,"ID_Canal",Canales,"ID","Info",JoinKind.LeftOuter)
-= Table.Combine({Enero, Febrero, Marzo})`,
+= Table.NestedJoin(Campaigns,"ID_Channel",Channels,"ID","Info",JoinKind.LeftOuter)
+= Table.Combine({Jan, Feb, Mar})`,
     table:{
-      headers:['Operación','Equivalente SQL','Caso de uso'],
+      headers:['Operation','SQL Equivalent','Use Case'],
       rows:[
-        ['Merge > Inner','INNER JOIN','Solo registros con match en ambas tablas'],
-        ['Merge > Left Outer','LEFT JOIN','Todos los de la tabla izquierda'],
-        ['Merge > Full Outer','FULL OUTER JOIN','Todos los registros de ambas tablas'],
-        ['Append','UNION ALL','Apilar datos de misma estructura'],
-        ['Group By','GROUP BY','Resumir por categoría'],
+        ['Merge > Inner','INNER JOIN','Only records with matches in both tables'],
+        ['Merge > Left Outer','LEFT JOIN','All records from the left table'],
+        ['Merge > Full Outer','FULL OUTER JOIN','All records from both tables'],
+        ['Append','UNION ALL','Stack data with same structure'],
+        ['Group By','GROUP BY','Summarise by category'],
       ]
     },
-    error:'En un Left Outer Join los registros sin match aparecen con null — no se eliminan. Confundirlo con Inner Join puede hacer que pierdas registros sin notarlo.'
+    error:'In a Left Outer Join, unmatched records appear with null — they are not removed. Confusing it with Inner Join can silently lose records.'
   },
   {
-    n:'05', title:'Refresh automático',
-    desc:'Una vez configurada la consulta, actualizar todos los datos es un clic — o puede ocurrir automáticamente.',
-    code:`// Actualizar manualmente:
-Datos > Actualizar todo   (atajo: Ctrl+Alt+F5)
+    n:'05', title:'Auto-refresh',
+    desc:'Once the query is configured, updating all data is one click — or can happen automatically.',
+    code:`// Refresh manually:
+Data > Refresh All   (shortcut: Ctrl+Alt+F5)
 
-// Actualizar al abrir el archivo:
-Datos > Consultas y conexiones >
-Clic derecho en consulta > Propiedades >
-☑ Actualizar al abrir el archivo
+// Refresh on file open:
+Data > Queries & Connections >
+Right-click query > Properties >
+☑ Refresh data when opening the file
 
-// Refresh en background (no bloquea Excel):
-Propiedades > ☑ Habilitar actualización en segundo plano`,
-    tip:'Si la fuente es un archivo CSV en ruta local (C:\\...), el refresh fallará en otro equipo. Usa rutas de SharePoint u OneDrive para que funcione en toda la organización.'
+// Background refresh (doesn\'t block Excel):
+Properties > ☑ Enable background refresh`,
+    tip:'If the source is a CSV file on a local path (C:\\...), the refresh will fail on another computer. Use SharePoint or OneDrive paths so it works across the organisation.'
   },
 ];
 
 function PowerQueryTab() {
   return (
     <div className="fade-up">
-      <SH2 title="Power Query" sub="ETL sin código: conectar, limpiar, transformar y combinar datos — repetible con un clic."/>
+      <SH2 title="Power Query" sub="Code-free ETL: connect, clean, transform, and combine data — repeatable with one click."/>
       <div className="analogy-box" style={{marginBottom:'1.5rem'}}>
         <span style={{marginRight:'.4rem'}}>🔄</span>
-        <strong>La analogía completa:</strong> Power Query es como una receta de cocina grabada. La primera vez limpias los datos manualmente siguiendo los pasos. La segunda vez presionas "Refresh" y Power Query los repite automáticamente. Cada transformación queda en un log visible, editable y reproducible.
+        <strong>The full analogy:</strong> Power Query is like a recorded recipe. The first time you manually clean data following the steps. The second time you press "Refresh" and Power Query repeats them automatically. Every transformation is logged, visible, editable, and reproducible.
       </div>
       {PQ_STEPS.map(({ n, title, desc, code, table, error, tip }) => (
         <div key={n} className="card" style={{marginBottom:'1.4rem'}}>
@@ -672,216 +677,220 @@ function PowerQueryTab() {
   );
 }
 
-/* ── TAB 5: PIVOTS ── */
+/* ═══════════════════════════════════════════════
+   TAB 5: PIVOT TABLES
+═══════════════════════════════════════════════ */
+
 const PIVOT_DATA = [
   {
-    name:'Campos calculados',tag:'Fórmulas dentro del pivot',diff:'Avanzado',icon:'🧮',
-    analogy:'Un campo calculado es como agregar una columna de fórmulas dentro de la tabla dinámica. En vez de operar sobre las filas del dataset, opera sobre los subtotales que ya calculó el pivot — es una fórmula sobre el resumen, no sobre los datos crudos.',
-    code:`// Analizar > Campos, Elementos y Conjuntos > Campo calculado
+    name:'Calculated Fields',tag:'Formulas inside the pivot',diff:'Advanced',icon:'🧮',
+    analogy:'A calculated field is like adding a formula column inside the Pivot Table. Instead of operating on individual rows, it operates on the subtotals that the pivot has already calculated — it\'s a formula on the summary, not the raw data.',
+    code:`// Analyse > Fields, Items & Sets > Calculated Field
 
-// Campo: Margen de ganancia
-Nombre: Margen
-Formula: = Profit / Revenue   // Profit y Revenue son campos del pivot
+// Field: Profit margin
+Name: Margin
+Formula: = Profit / Revenue   // Profit and Revenue are pivot fields
 
-// Campo: ROAS
-Nombre: ROAS
+// Field: ROAS
+Name: ROAS
 Formula: = Revenue / Spend
 
-// IMPORTANTE: los campos calculados SIEMPRE suman primero y dividen después
-// = SUM(Profit) / SUM(Revenue)  — NO promedia filas individuales
-// Si necesitas calcular por fila, usa una columna en el dataset original`,
-    error:'Los campos calculados operan sobre valores agregados (suma), no sobre cada fila. Si quieres margen por fila individual, agrega una columna calculada al dataset original, no al pivot.'
+// IMPORTANT: calculated fields ALWAYS sum first, then divide
+// = SUM(Profit) / SUM(Revenue)  — does NOT average individual rows
+// If you need row-level calculation, add a column to the original dataset`,
+    error:'Calculated fields operate on aggregated values (sum), not on individual rows. If you want margin per individual row, add a calculated column to the original dataset, not the pivot.'
   },
   {
-    name:'Segmentadores (Slicers)',tag:'Filtros visuales conectados a múltiples pivots',diff:'Interactividad',icon:'🎛️',
-    analogy:'Los slicers son botones de filtro visuales que cualquier usuario puede usar sin entender nada de tablas dinámicas. Puedes conectar un mismo slicer a múltiples tablas dinámicas y gráficos — al hacer clic, todo se filtra en sincronía. Son la base de los dashboards ejecutivos en Excel.',
-    code:`// Agregar slicer:
-Analizar > Insertar Segmentación de datos
-// Seleccionar campo: Canal, Región, Mes, etc.
+    name:'Slicers',tag:'Visual filters connected to multiple pivots',diff:'Interactivity',icon:'🎛️',
+    analogy:'Slicers are visual filter buttons that any user can use without understanding anything about Pivot Tables. You can connect the same slicer to multiple Pivot Tables and charts — when you click, everything filters in sync. They\'re the foundation of executive dashboards in Excel.',
+    code:`// Add a slicer:
+Analyse > Insert Slicer
+// Select field: Channel, Region, Month, etc.
 
-// Conectar un slicer a múltiples tablas dinámicas:
-Clic derecho en slicer > Conexiones de informe
-// ☑ Tabla Dinámica 1  ☑ Tabla Dinámica 2  ☑ Gráfico 1
+// Connect a slicer to multiple Pivot Tables:
+Right-click slicer > Report Connections
+// ☑ Pivot Table 1  ☑ Pivot Table 2  ☑ Chart 1
 
-// Selección múltiple en slicer:
-// Shift+clic (rango) o Ctrl+clic (individual)
-// O activar el botón de selección múltiple en el slicer
+// Multi-select in slicer:
+// Shift+click (range) or Ctrl+click (individual)
+// Or turn on the multi-select button on the slicer
 
-// Personalizar estilo:
-// Pestaña Slicer > Estilos de slicer > Nuevo estilo`,
-    tip:'Organiza los slicers en una fila horizontal sobre el dashboard con tamaño uniforme. Usa "Columnas" en el panel del slicer para mostrar múltiples opciones en grid en vez de lista vertical.'
+// Customise style:
+// Slicer tab > Slicer Styles > New Style`,
+    tip:'Arrange slicers in a horizontal row above the dashboard with uniform size. Use "Columns" in the slicer panel to show multiple options in a grid instead of a vertical list.'
   },
   {
-    name:'Timeline (Escala de tiempo)',tag:'Filtro visual de fechas con slider',diff:'Fechas',icon:'📅',
-    analogy:'El Timeline es un slicer especializado para fechas con una barra deslizable. El usuario filtra por año, trimestre, mes o día con un control visual — sin escribir nada. Ideal para dashboards donde la dimensión temporal es central.',
-    code:`// Agregar timeline:
-Analizar > Insertar Escala de tiempo
-// Solo funciona con campos de FECHA real (no texto que parezca fecha)
+    name:'Timeline',tag:'Visual date filter with slider',diff:'Dates',icon:'📅',
+    analogy:'The Timeline is a specialised slicer for dates with a slide bar. The user filters by year, quarter, month, or day with a visual control — without typing anything. Ideal for dashboards where the time dimension is central.',
+    code:`// Add a timeline:
+Analyse > Insert Timeline
+// Only works with DATE fields (not text that looks like a date)
 
-// Niveles de granularidad disponibles:
-// AÑOS > TRIMESTRES > MESES > DÍAS
-// Cambiar con el selector desplegable en la esquina superior derecha
+// Available granularity levels:
+// YEARS > QUARTERS > MONTHS > DAYS
+// Change with the dropdown selector in the top-right corner
 
-// El Timeline y los slicers se combinan:
-// Timeline filtra por período → Slicer filtra por Canal
-// Ambos actúan sobre el mismo pivot simultáneamente`,
-    error:'Si el campo de fecha está almacenado como texto, el Timeline no aparece disponible. Verifica con =ISNUMBER(celda) — si devuelve FALSE, convierte a fecha real primero.'
+// Timeline and slicers work together:
+// Timeline filters by period → Slicer filters by Channel
+// Both act on the same pivot simultaneously`,
+    error:'If the date field is stored as text, the Timeline isn\'t available. Check with =ISNUMBER(cell) — if FALSE, convert to a real date first.'
   },
   {
-    name:'Agrupaciones personalizadas',tag:'Segmentar sin modificar el dataset',diff:'Segmentación',icon:'📦',
-    analogy:'Las agrupaciones te permiten crear segmentos que no existen como columna en tu dataset. Agrupar edades en rangos (18-24, 25-34) o fechas en quincenas personalizadas — sin tocar los datos originales.',
-    code:`// Agrupar NÚMEROS en rangos (ej: age buckets):
-// Clic derecho en campo numérico en el pivot > Agrupar
-// Inicio: 18 / Fin: 65 / Por: 10
-// → genera automáticamente: 18-27, 28-37, 38-47...
+    name:'Custom Grouping',tag:'Segment without modifying the dataset',diff:'Segmentation',icon:'📦',
+    analogy:'Groupings let you create segments that don\'t exist as a column in your dataset. Group ages into ranges (18-24, 25-34) or dates into custom fortnights — without touching the original data.',
+    code:`// Group NUMBERS into ranges (e.g., age buckets):
+// Right-click numeric field in pivot > Group
+// Starting at: 18 / Ending at: 65 / By: 10
+// → automatically generates: 18-27, 28-37, 38-47...
 
-// Agrupar FECHAS:
-// Clic derecho en campo fecha > Agrupar
-// Seleccionar: Años + Trimestres + Meses (jerarquía)
+// Group DATES:
+// Right-click date field > Group
+// Select: Years + Quarters + Months (hierarchy)
 
-// Agrupar TEXTO manualmente:
-// Seleccionar filas a agrupar (Ctrl+clic) > Clic derecho > Agrupar
-// → útil para agrupar países en regiones, productos en categorías`,
-    tip:'Las agrupaciones de texto no afectan el dataset original. Pero si el pivot recibe datos nuevos con valores no asignados, aparece un grupo automático "Otros" — revísalo en cada refresh.'
+// Group TEXT manually:
+// Select rows to group (Ctrl+click) > Right-click > Group
+// → useful for grouping countries into regions, products into categories`,
+    tip:'Text groupings don\'t affect the original dataset. But if the pivot receives new data with unassigned values, an automatic "Other" group appears — check it after every refresh.'
   },
 ];
 
 function PivotsTab() {
   return (
     <div className="fade-up">
-      <SH2 title="Tablas dinámicas avanzadas" sub="Más allá del conteo básico: campos calculados, segmentadores y agrupaciones."/>
+      <SH2 title="Advanced Pivot Tables" sub="Beyond basic counting: calculated fields, slicers, and groupings."/>
       <div className="analogy-box" style={{marginBottom:'1.5rem'}}>
         <span style={{marginRight:'.4rem'}}>🔄</span>
-        Una tabla dinámica es una vista resumida que se recalcula instantáneamente cuando cambias dimensiones o métricas. No modifica los datos originales. Es el informe más flexible de Excel — y la mayoría de usuarios solo usa el 20% de sus capacidades.
+        A Pivot Table is a summary view that recalculates instantly when you change dimensions or metrics. It doesn\'t modify the original data. It\'s Excel\'s most flexible report — and most users only use 20% of its capabilities.
       </div>
       {PIVOT_DATA.map(d => <FormulaCard key={d.name} d={d}/>)}
     </div>
   );
 }
+
 /* ═══════════════════════════════════════════════
-   PHASE 4 — CASOS REALES · CHEAT SHEET
+   TAB 6: REAL-WORLD CASES
 ═══════════════════════════════════════════════ */
 
 function CasesTab() {
   return (
     <div className="fade-up">
-      <SH2 title="Casos de uso reales" sub="Análisis que resuelven preguntas concretas de negocio — con las fórmulas del mundo real."/>
+      <SH2 title="Real-World Use Cases" sub="Analysis that answers concrete business questions — with real-world formulas."/>
 
       {/* Cohort Analysis */}
       <div className="card" style={{marginBottom:'1.5rem'}}>
         <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
-          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Análisis de cohortes</h3>
-          <span style={{color:'#8b86a8',fontSize:'.77rem'}}>¿Cuántos usuarios siguen activos semana a semana?</span>
-          <div style={{marginLeft:'auto',display:'flex',gap:'.35rem'}}><Badge text="Marketing" color="teal"/><Badge text="Simulador" color="green"/></div>
+          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Cohort Analysis</h3>
+          <span style={{color:'#8b86a8',fontSize:'.77rem'}}>How many users remain active week by week?</span>
+          <div style={{marginLeft:'auto',display:'flex',gap:'.35rem'}}><Badge text="Marketing" color="teal"/><Badge text="Simulator" color="green"/></div>
         </div>
-        <Analogy icon="👥" text="Una cohorte es un grupo de usuarios que empezaron en el mismo período. El análisis de cohortes muestra cuántos siguen activos semana a semana. El primer valor siempre es 100% — lo que importa es cuánto cae y a qué velocidad se estabiliza."/>
-        <Code code={`// Estructura del dataset:
-// Columnas: Cohorte (mes adquisición) | Semana | Usuarios_Activos
+        <Analogy icon="👥" text="A cohort is a group of users who started in the same period. Cohort analysis shows how many remain active week by week. The first value is always 100% — what matters is how much it drops and at what speed it stabilises."/>
+        <Code code={`// Dataset structure:
+// Columns: Cohort (acquisition month) | Week | Active_Users
 
-// Tasa de retención por semana (Week N / Week 0):
+// Retention rate by week (Week N / Week 0):
 =C3/$C$2
 
-// Fórmula para detectar la semana de estabilización:
-// Cuando la caída entre semanas es < 2pp, la cohorte se estabilizó
+// Formula to detect stabilisation week:
+// When the drop between weeks is < 2pp, the cohort has stabilised
 =ABS(D3-D2)<0.02
 
-// Moving average para suavizar la curva:
-=AVERAGE(OFFSET(C2,-MIN(ROW()-2,3),0,MIN(ROW()-1,4),1))`} label="Estructura del análisis"/>
+// Moving average to smooth the curve:
+=AVERAGE(OFFSET(C2,-MIN(ROW()-2,3),0,MIN(ROW()-1,4),1))`} label="Analysis structure"/>
         {typeof CohortSimulator !== 'undefined'
           ? <div style={{marginTop:'1rem'}}><CohortSimulator/></div>
-          : <div style={{marginTop:'1rem',padding:'1rem',background:'#0d0b22',borderRadius:'8px',color:'#504d70',fontSize:'.8rem',fontFamily:'DM Mono, monospace',textAlign:'center'}}>⏳ Simulador cargando...</div>
+          : <div style={{marginTop:'1rem',padding:'1rem',background:'#0d0b22',borderRadius:'8px',color:'#504d70',fontSize:'.8rem',fontFamily:'DM Mono, monospace',textAlign:'center'}}>⏳ Simulator loading...</div>
         }
       </div>
 
       {/* Attribution */}
       <div className="card" style={{marginBottom:'1.5rem'}}>
         <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
-          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Atribución simplificada de marketing</h3>
+          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Simplified Marketing Attribution</h3>
           <Badge text="Marketing" color="teal"/>
         </div>
-        <Analogy icon="🎯" text="La atribución responde: ¿qué canal generó la conversión? El modelo más simple asigna el 100% al último clic. En Excel puedes construir Last Click, First Click y Linear para comparar cuánto crédito recibe cada canal."/>
-        <Code code={`// Modelo Last Click (100% crédito al último canal):
+        <Analogy icon="🎯" text="Attribution answers: which channel drove the conversion? The simplest model assigns 100% to the last click. In Excel you can build Last Click, First Click, and Linear to compare how much credit each channel receives."/>
+        <Code code={`// Last Click model (100% credit to last channel):
 =XLOOKUP(OrderID, Touchpoints[OrderID], Touchpoints[Last_Channel])
 
-// Modelo Linear (crédito dividido por igual entre touchpoints):
+// Linear model (credit divided equally among touchpoints):
 =Revenue / COUNTIF(Touchpoints[OrderID], B2)
 
-// Modelo Time Decay (más reciente = más crédito):
-// Peso = 2^(-(días_antes_conversión / 7))
-=POWER(2, -(Touchpoints[Dias_Antes]/7))
+// Time Decay model (more recent = more credit):
+// Weight = 2^(-(days_before_conversion / 7))
+=POWER(2, -(Touchpoints[Days_Before]/7))
 
-// Normalizar pesos para que sumen 1:
-=C2 / SUMIF(Touchpoints[OrderID], B2, Touchpoints[Peso])`} label="Los tres modelos en fórmulas"/>
+// Normalise weights to sum to 1:
+=C2 / SUMIF(Touchpoints[OrderID], B2, Touchpoints[Weight])`} label="All three models in formulas"/>
         <DT
-          headers={['Canal','Last Click','First Click','Linear']}
+          headers={['Channel','Last Click','First Click','Linear']}
           rows={[
             ['Paid Search','€45,200 (38%)','€28,100 (24%)','€32,400 (27%)'],
             ['Email','€31,800 (27%)','€22,500 (19%)','€26,100 (22%)'],
             ['Social','€18,400 (15%)','€38,200 (32%)','€28,700 (24%)'],
             ['Display','€22,100 (19%)','€29,400 (25%)','€31,000 (26%)'],
           ]}
-          result="Last Click sub-estima canales de awareness (Social, Display)"
+          result="Last Click under-estimates awareness channels (Social, Display)"
         />
       </div>
 
       {/* Moving Average Forecast */}
       <div className="card" style={{marginBottom:'1.5rem'}}>
         <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
-          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Forecast con media móvil</h3>
-          <Badge text="Negocio" color="orange"/>
+          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Forecast with Moving Average</h3>
+          <Badge text="Business" color="orange"/>
         </div>
-        <Analogy icon="📉" text="Una media móvil suaviza los picos y valles del revenue semanal para revelar la tendencia real. Es como poner un filtro en el audio: elimina el ruido y deja pasar la señal. Más simple que regresión pero muy efectiva para detectar tendencias de corto plazo."/>
-        <Code code={`// Media móvil de 4 semanas:
+        <Analogy icon="📉" text="A moving average smooths the peaks and valleys of weekly revenue to reveal the real trend. It\'s like putting a filter on audio: it removes the noise and lets the signal through. Simpler than regression but very effective for detecting short-term trends."/>
+        <Code code={`// 4-week moving average:
 =AVERAGE(OFFSET(C2, -3, 0, 4, 1))
 
-// Media móvil dinámica (funciona desde la primera fila):
+// Dynamic moving average (works from the first row):
 =AVERAGE(OFFSET(C2, -MIN(ROW()-2,3), 0, MIN(ROW()-1,4), 1))
 
-// Forecast: extender la tendencia con regresión lineal:
+// Forecast: extend the trend with linear regression:
 =FORECAST.LINEAR(
-  MAX(Semanas[Num]) + 1,   // próxima semana
-  TAKE(Semanas[Revenue],-8), // últimas 8 semanas
-  TAKE(Semanas[Num],-8)      // sus índices
+  MAX(Weeks[Num]) + 1,   // next week
+  TAKE(Weeks[Revenue],-8), // last 8 weeks
+  TAKE(Weeks[Num],-8)      // their indices
 )
 
-// Límites de confianza del forecast (±1 STDEV):
-=E2 + STDEV.S(OFFSET(C2,-7,0,8,1))  // límite superior
-=E2 - STDEV.S(OFFSET(C2,-7,0,8,1))  // límite inferior`}/>
+// Confidence bounds of the forecast (±1 STDEV):
+=E2 + STDEV.S(OFFSET(C2,-7,0,8,1))  // upper bound
+=E2 - STDEV.S(OFFSET(C2,-7,0,8,1))  // lower bound`}/>
         <DT
-          headers={['Semana','Revenue','Media Móvil 4s','Forecast']}
+          headers={['Week','Revenue','MA 4w','Forecast']}
           rows={[
-            ['S09','€11,200','€10,850',''],
-            ['S10','€13,400','€11,625',''],
-            ['S11','€10,800','€11,575',''],
-            ['S12','€14,100','€12,375',''],
-            ['S13 →','','','€13,100 ± €1,450'],
+            ['W09','€11,200','€10,850',''],
+            ['W10','€13,400','€11,625',''],
+            ['W11','€10,800','€11,575',''],
+            ['W12','€14,100','€12,375',''],
+            ['W13 →','','','€13,100 ± €1,450'],
           ]}
-          result="La media móvil revela una tendencia alcista del 14% en 4 semanas"
+          result="The moving average reveals an upward trend of 14% over 4 weeks"
         />
       </div>
 
       {/* ABC Analysis */}
       <div className="card" style={{marginBottom:'1rem'}}>
         <div style={{display:'flex',alignItems:'center',gap:'.55rem',flexWrap:'wrap',marginBottom:'.82rem'}}>
-          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>Análisis ABC de productos / campañas</h3>
-          <Badge text="Negocio" color="navy"/>
+          <h3 style={{fontSize:'.96rem',fontWeight:700,color:'#e8e6f0',fontFamily:'DM Mono, monospace'}}>ABC Analysis of Products / Campaigns</h3>
+          <Badge text="Business" color="navy"/>
         </div>
-        <Analogy icon="🅰️" text="El análisis ABC aplica el principio de Pareto: el 20% de los productos genera el 80% del revenue. Clasifica cada ítem en A (top 80%), B (siguiente 15%) y C (último 5%). Te dice dónde enfocar el presupuesto y qué candidatos eliminar."/>
-        <Code code={`// 1. Calcular % del revenue total por producto:
-=Tabla[Revenue] / SUM(Tabla[Revenue])
+        <Analogy icon="🅰️" text="ABC analysis applies the Pareto principle: 20% of products generate 80% of revenue. It classifies each item as A (top 80%), B (next 15%), and C (last 5%). It tells you where to focus budget and which candidates to eliminate."/>
+        <Code code={`// 1. Calculate % of total revenue per product:
+=Table[Revenue] / SUM(Table[Revenue])
 
-// 2. Calcular % acumulado (con datos ordenados desc.):
-=D1 + C2     // suma acumulada simple
-// O dinámico con SUMIF:
-=SUMIF(Tabla[Revenue],">="&B2, Tabla[PctRevenue])
+// 2. Calculate cumulative % (data sorted descending):
+=D1 + C2     // simple cumulative sum
+// Or dynamic with SUMIF:
+=SUMIF(Table[Revenue],">="&B2, Table[PctRevenue])
 
-// 3. Clasificar en A / B / C:
+// 3. Classify as A / B / C:
 =IF(E2<=0.80,"A", IF(E2<=0.95,"B","C"))
 
-// 4. Filtrar solo los ítems de categoría A:
-=FILTER(Tabla, Tabla[ABC]="A")`}/>
+// 4. Filter only category A items:
+=FILTER(Table, Table[ABC]="A")`}/>
         <DT
-          headers={['Producto','Revenue','% Acum.','Categoría']}
+          headers={['Product','Revenue','Cum. %','Category']}
           rows={[
             ['Pro Plan','€82,400','34.2%','A'],
             ['Enterprise','€71,200','63.8%','A'],
@@ -890,51 +899,54 @@ function CasesTab() {
             ['Add-on A','€14,100','93.7%','B'],
             ['Add-on B','€8,200','97.1%','C'],
           ]}
-          result="3 productos (43%) generan el 80% del revenue → categoría A"
+          result="3 products (43%) generate 80% of revenue → category A"
         />
       </div>
     </div>
   );
 }
 
-/* ── TAB 7: CHEAT SHEET ── */
+/* ═══════════════════════════════════════════════
+   TAB 7: CHEAT SHEET
+═══════════════════════════════════════════════ */
+
 const CS_DATA = [
   {cat:'Lookup',items:[
-    {fn:'XLOOKUP',  desc:'Búsqueda moderna en cualquier dirección',ex:'=XLOOKUP(A2,Tabla[ID],Tabla[Email],"N/A")'},
-    {fn:'INDEX+MATCH',desc:'Lookup bidireccional — compatible con todas las versiones',ex:'=INDEX(B:B,MATCH(A2,C:C,0))'},
-    {fn:'FILTER',   desc:'Filtrar tabla por condición — resultado dinámico',ex:'=FILTER(A:C, B:B>1000, "Vacío")'},
-    {fn:'UNIQUE',   desc:'Lista sin duplicados auto-actualizable',ex:'=SORT(UNIQUE(A:A))'},
-    {fn:'SORT',     desc:'Ordenar tabla sin tocar el original',ex:'=SORT(A:B, 2, -1)'},
+    {fn:'XLOOKUP',  desc:'Modern lookup in any direction',ex:'=XLOOKUP(A2,Table[ID],Table[Email],"N/A")'},
+    {fn:'INDEX+MATCH',desc:'Two-way lookup — compatible with all versions',ex:'=INDEX(B:B,MATCH(A2,C:C,0))'},
+    {fn:'FILTER',   desc:'Filter table by condition — dynamic result',ex:'=FILTER(A:C, B:B>1000, "Empty")'},
+    {fn:'UNIQUE',   desc:'Deduplicated list, auto-updating',ex:'=SORT(UNIQUE(A:A))'},
+    {fn:'SORT',     desc:'Sort table without touching original',ex:'=SORT(A:B, 2, -1)'},
   ]},
-  {cat:'Agregación',items:[
-    {fn:'SUMIFS',   desc:'Suma con múltiples condiciones',ex:'=SUMIFS(Rev,Canal,"Email",Mes,"Q1")'},
-    {fn:'COUNTIFS', desc:'Contar con múltiples condiciones',ex:'=COUNTIFS(Status,"Won",Region,"Norte")'},
-    {fn:'AVERAGEIFS',desc:'Promedio condicional',ex:'=AVERAGEIFS(Revenue,Canal,"Social")'},
-    {fn:'MAXIFS',   desc:'Máximo con condición',ex:'=MAXIFS(Revenue,Canal,"Email")'},
-    {fn:'SUMPRODUCT',desc:'Multiplicar arrays y sumar — el navaja suiza',ex:'=SUMPRODUCT((A:A="X")*(B:B>100)*C:C)'},
+  {cat:'Aggregation',items:[
+    {fn:'SUMIFS',   desc:'Sum with multiple conditions',ex:'=SUMIFS(Rev,Channel,"Email",Month,"Q1")'},
+    {fn:'COUNTIFS', desc:'Count with multiple conditions',ex:'=COUNTIFS(Status,"Won",Region,"North")'},
+    {fn:'AVERAGEIFS',desc:'Conditional average',ex:'=AVERAGEIFS(Revenue,Channel,"Social")'},
+    {fn:'MAXIFS',   desc:'Maximum with condition',ex:'=MAXIFS(Revenue,Channel,"Email")'},
+    {fn:'SUMPRODUCT',desc:'Multiply arrays and sum — the Swiss Army knife',ex:'=SUMPRODUCT((A:A="X")*(B:B>100)*C:C)'},
   ]},
-  {cat:'Estadística',items:[
-    {fn:'PERCENTILE.INC',desc:'Percentil k de una distribución (0 a 1)',ex:'=PERCENTILE.INC(LTV,0.75)'},
-    {fn:'STDEV.S',  desc:'Desviación estándar de muestra',ex:'=STDEV.S(Ventas[Revenue])'},
-    {fn:'CORREL',   desc:'Coeficiente de correlación (−1 a 1)',ex:'=CORREL(Spend,Conversiones)'},
-    {fn:'FORECAST.LINEAR',desc:'Predicción lineal basada en datos históricos',ex:'=FORECAST.LINEAR(13,Revenue,Semanas)'},
-    {fn:'NORM.DIST',desc:'Probabilidad bajo distribución normal',ex:'=NORM.DIST(100000,85000,12000,TRUE)'},
+  {cat:'Statistics',items:[
+    {fn:'PERCENTILE.INC',desc:'Percentile k of a distribution (0 to 1)',ex:'=PERCENTILE.INC(LTV,0.75)'},
+    {fn:'STDEV.S',  desc:'Sample standard deviation',ex:'=STDEV.S(Sales[Revenue])'},
+    {fn:'CORREL',   desc:'Correlation coefficient (−1 to 1)',ex:'=CORREL(Spend,Conversions)'},
+    {fn:'FORECAST.LINEAR',desc:'Linear prediction based on historical data',ex:'=FORECAST.LINEAR(13,Revenue,Weeks)'},
+    {fn:'NORM.DIST',desc:'Probability under normal distribution',ex:'=NORM.DIST(100000,85000,12000,TRUE)'},
   ]},
-  {cat:'Texto y fechas',items:[
-    {fn:'TEXTJOIN', desc:'Unir textos con separador, ignorando blancos',ex:'=TEXTJOIN(", ",TRUE,A2:A10)'},
-    {fn:'EOMONTH',  desc:'Último día del mes (n meses hacia adelante/atrás)',ex:'=EOMONTH(TODAY(),0)'},
-    {fn:'NETWORKDAYS',desc:'Días laborables entre dos fechas',ex:'=NETWORKDAYS(A2,B2)'},
+  {cat:'Text & Dates',items:[
+    {fn:'TEXTJOIN', desc:'Join text with delimiter, ignoring blanks',ex:'=TEXTJOIN(", ",TRUE,A2:A10)'},
+    {fn:'EOMONTH',  desc:'Last day of the month (n months forward/back)',ex:'=EOMONTH(TODAY(),0)'},
+    {fn:'NETWORKDAYS',desc:'Working days between two dates',ex:'=NETWORKDAYS(A2,B2)'},
   ]},
-  {cat:'Avanzado',items:[
-    {fn:'LET',      desc:'Nombrar cálculos intermedios para reutilizar',ex:'=LET(x,A2*B2, x/SUM(A:A))'},
-    {fn:'IFERROR',  desc:'Devolver valor alternativo ante cualquier error',ex:'=IFERROR(A2/B2, 0)'},
+  {cat:'Advanced',items:[
+    {fn:'LET',      desc:'Name intermediate calculations for reuse',ex:'=LET(x,A2*B2, x/SUM(A:A))'},
+    {fn:'IFERROR',  desc:'Return alternative value on any error',ex:'=IFERROR(A2/B2, 0)'},
   ]},
 ];
 
 function CheatSheetTab() {
   return (
     <div className="fade-up">
-      <SH2 title="Cheat Sheet" sub="Las 20 fórmulas que más usa un analista de datos — con ejemplos concretos."/>
+      <SH2 title="Cheat Sheet" sub="The 20 formulas most used by data analysts — with concrete examples."/>
       {CS_DATA.map(({ cat, items }) => (
         <div key={cat} style={{marginBottom:'1.5rem'}}>
           <div style={{display:'flex',alignItems:'center',gap:'.5rem',marginBottom:'.72rem'}}>
@@ -955,21 +967,21 @@ function CheatSheetTab() {
 
       {/* Quick Reference */}
       <div className="card" style={{marginTop:'.5rem'}}>
-        <h3 style={{fontSize:'.93rem',fontWeight:700,color:'#e8e6f0',marginBottom:'.82rem'}}>Atajos y errores clave</h3>
+        <h3 style={{fontSize:'.93rem',fontWeight:700,color:'#e8e6f0',marginBottom:'.82rem'}}>Key Shortcuts & Errors</h3>
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(210px,1fr))',gap:'.6rem'}}>
           {[
-            ['Ctrl+T','Convertir rango a tabla'],
-            ['Ctrl+Alt+F5','Actualizar todo (Power Query)'],
-            ['F4','Anclar referencia ($A$1)'],
-            ['Ctrl+`','Mostrar todas las fórmulas'],
-            ['Alt+F11','Abrir editor VBA'],
-            ['Ctrl+Shift+Enter','Array formula (Excel antiguo)'],
-            ['#SPILL!','La zona de derrame no está vacía'],
-            ['#N/A','No se encontró el valor buscado'],
-            ['#REF!','Referencia inválida (celda eliminada)'],
-            ['#VALUE!','Tipo de dato incorrecto en la fórmula'],
-            ['* en arrays','AND lógico entre dos condiciones'],
-            ['+ en arrays','OR lógico entre dos condiciones'],
+            ['Ctrl+T','Convert range to table'],
+            ['Ctrl+Alt+F5','Refresh all (Power Query)'],
+            ['F4','Anchor reference ($A$1)'],
+            ['Ctrl+`','Show all formulas'],
+            ['Alt+F11','Open VBA editor'],
+            ['Ctrl+Shift+Enter','Array formula (legacy Excel)'],
+            ['#SPILL!','The spill range isn\'t empty'],
+            ['#N/A','Lookup value not found'],
+            ['#REF!','Invalid reference (deleted cell)'],
+            ['#VALUE!','Incorrect data type in formula'],
+            ['* in arrays','Logical AND between conditions'],
+            ['+ in arrays','Logical OR between conditions'],
           ].map(([key, desc]) => (
             <div key={key} style={{display:'flex',gap:'.55rem',alignItems:'flex-start'}}>
               <code style={{background:'#0d0b22',border:'1px solid #1e1b46',borderRadius:'4px',padding:'.08rem .42rem',fontFamily:'DM Mono, monospace',fontSize:'.73rem',color:'#13d6c1',whiteSpace:'nowrap',flexShrink:0}}>{key}</code>
@@ -981,8 +993,9 @@ function CheatSheetTab() {
     </div>
   );
 }
+
 /* ═══════════════════════════════════════════════
-   PHASE 5 — SIMULADOR DE COHORTES · QUIZ
+   COHORT SIMULATOR
 ═══════════════════════════════════════════════ */
 
 function CohortSimulator() {
@@ -1012,7 +1025,7 @@ function CohortSimulator() {
   return (
     <div>
       <div style={{marginBottom:'.85rem',padding:'.6rem .82rem',background:'rgba(19,214,193,.06)',border:'1px solid rgba(19,214,193,.18)',borderRadius:'8px',fontSize:'.8rem',color:'#9af0e8'}}>
-        <strong style={{color:'#13d6c1'}}>Cómo usarlo:</strong> Ajusta los sliders para ingresar la retención por semana. La línea teal es tu cohorte; la gris punteada es un benchmark de SaaS típico.
+        <strong style={{color:'#13d6c1'}}>How to use:</strong> Adjust the sliders to enter retention by week. The teal line is your cohort; the dotted grey line is a typical SaaS benchmark.
       </div>
 
       {/* SVG Chart */}
@@ -1049,7 +1062,7 @@ function CohortSimulator() {
               <text x={toX(i)} y={toY(v)-8} textAnchor="middle" fill="#13d6c1" fontSize="8" fontFamily="DM Mono,monospace">{v}%</text>
             </g>
           ))}
-          <text x={PL+8} y={toY(ret[0])-13} fill="#13d6c1" fontSize="8" fontFamily="DM Mono,monospace" fontWeight="700">Tu cohorte</text>
+          <text x={PL+8} y={toY(ret[0])-13} fill="#13d6c1" fontSize="8" fontFamily="DM Mono,monospace" fontWeight="700">Your cohort</text>
         </svg>
       </div>
 
@@ -1057,7 +1070,7 @@ function CohortSimulator() {
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(96px,1fr))',gap:'.55rem',marginBottom:'.85rem'}}>
         {ret.map((v,i)=>(
           <div key={i} style={{background:'#0d0b22',border:'1px solid #1a1542',borderRadius:'8px',padding:'.6rem .55rem',textAlign:'center'}}>
-            <div style={{fontSize:'.67rem',color:'#3a3660',marginBottom:'.28rem',fontFamily:'DM Mono, monospace'}}>Sem. {i}</div>
+            <div style={{fontSize:'.67rem',color:'#3a3660',marginBottom:'.28rem',fontFamily:'DM Mono, monospace'}}>Week {i}</div>
             {i===0
               ? <div style={{fontSize:'1.1rem',fontWeight:700,color:'#13d6c1',fontFamily:'DM Mono, monospace'}}>100%</div>
               : <>
@@ -1072,9 +1085,9 @@ function CohortSimulator() {
       {/* KPIs */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:'.65rem'}}>
         {[
-          {label:'Caída W0→W1',  value:`-${drop1}pp`,   color: drop1>50?'#ef4444':drop1>30?'#fb923c':'#10b981'},
-          {label:'Retención W4', value:`${w4}%`,         color: w4>=30?'#10b981':w4>=20?'#fb923c':'#ef4444'},
-          {label:'Retención W8', value:`${final}%`,      color: final>=15?'#10b981':final>=10?'#fb923c':'#ef4444'},
+          {label:'Drop W0→W1',  value:`-${drop1}pp`,   color: drop1>50?'#ef4444':drop1>30?'#fb923c':'#10b981'},
+          {label:'Retention W4', value:`${w4}%`,         color: w4>=30?'#10b981':w4>=20?'#fb923c':'#ef4444'},
+          {label:'Retention W8', value:`${final}%`,      color: final>=15?'#10b981':final>=10?'#fb923c':'#ef4444'},
           {label:'vs Benchmark', value:`${vsBench>=0?'+':''}${vsBench}pp`, color: vsBench>=0?'#10b981':'#ef4444'},
         ].map(({label,value,color})=>(
           <div key={label} className="card" style={{textAlign:'center',padding:'.75rem'}}>
@@ -1087,47 +1100,50 @@ function CohortSimulator() {
   );
 }
 
-/* ── QUIZ ── */
+/* ═══════════════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════════════ */
+
 const QUIZ_DATA = [
   {
-    q:'¿Cuál argumento de XLOOKUP define qué devolver cuando no se encuentra la coincidencia?',
+    q:'Which XLOOKUP argument defines what to return when no match is found?',
     opts:['return_array','[if_not_found]','match_mode','lookup_array'],
     ans:1,
-    exp:'El cuarto argumento [if_not_found] te permite devolver un texto personalizado como "Sin registro" en lugar del error #N/A. Omitirlo es la causa número uno de #N/A en reportes productivos.'
+    exp:'The fourth argument [if_not_found] lets you return custom text like "No record" instead of the #N/A error. Omitting it is the number one cause of #N/A in production reports.'
   },
   {
-    q:'CORREL(A, B) devuelve un coeficiente que siempre está en el rango…',
-    opts:['0 a 1','−1 a 1','0 a 100','−100 a 100'],
+    q:'CORREL(A, B) returns a coefficient that is always in the range…',
+    opts:['0 to 1','−1 to 1','0 to 100','−100 to 100'],
     ans:1,
-    exp:'El coeficiente de correlación de Pearson va de −1 (correlación inversa perfecta) a 1 (correlación directa perfecta). 0 indica que no hay relación lineal detectable entre las variables.'
+    exp:'The Pearson correlation coefficient ranges from −1 (perfect inverse correlation) to 1 (perfect direct correlation). 0 indicates no detectable linear relationship between the variables.'
   },
   {
-    q:'En Power Query, ¿qué operación combina dos tablas usando una columna clave — equivalente a un JOIN en SQL?',
+    q:'In Power Query, which operation combines two tables using a key column — equivalent to a JOIN in SQL?',
     opts:['Append','Merge','Group By','Unpivot'],
     ans:1,
-    exp:'Merge combina tablas por una clave (JOIN). Append apila filas de misma estructura (UNION ALL). Group By agrega filas en resúmenes. Unpivot transforma columnas en filas para obtener formato "long".'
+    exp:'Merge combines tables by a key (JOIN). Append stacks rows of the same structure (UNION ALL). Group By aggregates rows into summaries. Unpivot transforms columns into rows to get "long" format.'
   },
   {
-    q:'¿Qué diferencia fundamental existe entre STDEV.S y STDEV.P?',
+    q:'What is the fundamental difference between STDEV.S and STDEV.P?',
     opts:[
-      'STDEV.S usa denominador n−1 (muestra); STDEV.P usa n (población)',
-      'STDEV.P es siempre más precisa que STDEV.S',
-      'STDEV.P ignora los valores negativos del rango',
-      'No hay diferencia, son fórmulas sinónimas',
+      'STDEV.S uses denominator n−1 (sample); STDEV.P uses n (population)',
+      'STDEV.P is always more accurate than STDEV.S',
+      'STDEV.P ignores negative values in the range',
+      'There is no difference, they are synonymous formulas',
     ],
     ans:0,
-    exp:'STDEV.S aplica corrección de Bessel (n−1) para estimar la desviación de una muestra. STDEV.P usa n y solo es correcto cuando tienes todos los datos de la población completa, no una muestra.'
+    exp:'STDEV.S applies Bessel\'s correction (n−1) to estimate the standard deviation of a sample. STDEV.P uses n and is only correct when you have the entire population\'s data, not a sample.'
   },
   {
-    q:'Una fórmula FILTER devuelve el error #SPILL! — ¿cuál es la causa más probable?',
+    q:'A FILTER formula returns the #SPILL! error — what is the most likely cause?',
     opts:[
-      'La condición del filtro tiene un error de tipo de dato',
-      'Las celdas donde debe derramar el resultado no están vacías',
-      'FILTER no está disponible en esta versión de Excel',
-      'El rango de la condición no coincide en tamaño con el array',
+      'The filter condition has a data type error',
+      'The cells where the result should spill are not empty',
+      'FILTER is not available in this version of Excel',
+      'The condition range size doesn\'t match the array size',
     ],
     ans:1,
-    exp:'#SPILL! ocurre cuando Excel no puede "derramar" el resultado porque hay datos en las celdas de salida. FILTER, UNIQUE, SORT y otras fórmulas dinámicas necesitan celdas vacías para colocar sus resultados.'
+    exp:'#SPILL! occurs when Excel can\'t "spill" the result because there\'s data in the output cells. FILTER, UNIQUE, SORT and other dynamic array formulas need empty cells to place their results.'
   },
 ];
 
@@ -1156,15 +1172,15 @@ function QuizSection() {
   return (
     <section style={{maxWidth:'740px',margin:'3rem auto',padding:'0 1rem 3rem'}}>
       <div style={{marginBottom:'1.4rem',textAlign:'center'}}>
-        <h2 style={{fontSize:'1.15rem',fontWeight:700,color:'#e8e6f0',marginBottom:'.18rem'}}>Quiz de Verificación</h2>
-        <p style={{color:'#8b86a8',fontSize:'.8rem'}}>5 preguntas — feedback inmediato</p>
+        <h2 style={{fontSize:'1.15rem',fontWeight:700,color:'#e8e6f0',marginBottom:'.18rem'}}>Verification Quiz</h2>
+        <p style={{color:'#8b86a8',fontSize:'.8rem'}}>5 questions — immediate feedback</p>
       </div>
 
       {!done ? (
         <div className="card">
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1rem'}}>
             <span style={{fontSize:'.73rem',color:'#8b86a8',fontFamily:'DM Mono, monospace'}}>{qi+1} / {QUIZ_DATA.length}</span>
-            <span className="result-badge">{score} correctas</span>
+            <span className="result-badge">{score} correct</span>
           </div>
 
           {/* Progress bar */}
@@ -1196,7 +1212,7 @@ function QuizSection() {
 
           <div style={{display:'flex',justifyContent:'flex-end'}}>
             <button className="btn-primary" onClick={next} disabled={!answered}>
-              {qi < QUIZ_DATA.length-1 ? 'Siguiente →' : 'Ver resultado'}
+              {qi < QUIZ_DATA.length-1 ? 'Next →' : 'See results'}
             </button>
           </div>
         </div>
@@ -1209,11 +1225,11 @@ function QuizSection() {
             {score} / {QUIZ_DATA.length}
           </div>
           <p style={{color:'#8b86a8',fontSize:'.86rem',marginBottom:'1.4rem'}}>
-            {score===5?'¡Perfecto! Dominas los fundamentos analíticos de Excel.':
-             score>=3?'Bien. Repasa los conceptos donde dudaste.':
-             'Revisa las secciones con más detalle — la práctica lo consolida.'}
+            {score===5?'Perfect! You\'ve mastered Excel analytical fundamentals.':
+             score>=3?'Good. Review the concepts where you hesitated.':
+             'Review the sections in more detail — practice consolidates learning.'}
           </p>
-          <button className="btn-primary" onClick={restart}>Reintentar quiz</button>
+          <button className="btn-primary" onClick={restart}>Retake quiz</button>
         </div>
       )}
     </section>
@@ -1223,13 +1239,14 @@ function QuizSection() {
 /* ═══════════════════════════════════════════════
    APP SHELL
 ═══════════════════════════════════════════════ */
+
 const TABS = [
-  {id:'foundations', icon:'🏗️', label:'Fundamentos'},
+  {id:'foundations', icon:'🏗️', label:'Foundations'},
   {id:'lookup',      icon:'🔍', label:'Lookups'},
-  {id:'stats',       icon:'📈', label:'Estadística'},
+  {id:'stats',       icon:'📈', label:'Statistics'},
   {id:'powerquery',  icon:'⚡', label:'Power Query'},
-  {id:'pivots',      icon:'🔄', label:'Tablas Dinámicas'},
-  {id:'cases',       icon:'🎯', label:'Casos Reales'},
+  {id:'pivots',      icon:'🔄', label:'Pivot Tables'},
+  {id:'cases',       icon:'🎯', label:'Real Cases'},
   {id:'cheatsheet',  icon:'📋', label:'Cheat Sheet'},
 ];
 
@@ -1238,12 +1255,12 @@ function App() {
 
   function renderTab() {
     switch(tab) {
-      case 'foundations': return typeof FoundationsTab !== 'undefined' ? <FoundationsTab/> : <Placeholder name="Fundamentos"/>;
+      case 'foundations': return typeof FoundationsTab !== 'undefined' ? <FoundationsTab/> : <Placeholder name="Foundations"/>;
       case 'lookup':      return typeof LookupTab      !== 'undefined' ? <LookupTab/>      : <Placeholder name="Lookups"/>;
-      case 'stats':       return typeof StatsTab       !== 'undefined' ? <StatsTab/>       : <Placeholder name="Estadística"/>;
+      case 'stats':       return typeof StatsTab       !== 'undefined' ? <StatsTab/>       : <Placeholder name="Statistics"/>;
       case 'powerquery':  return typeof PowerQueryTab  !== 'undefined' ? <PowerQueryTab/>  : <Placeholder name="Power Query"/>;
-      case 'pivots':      return typeof PivotsTab      !== 'undefined' ? <PivotsTab/>      : <Placeholder name="Tablas Dinámicas"/>;
-      case 'cases':       return typeof CasesTab       !== 'undefined' ? <CasesTab/>       : <Placeholder name="Casos Reales"/>;
+      case 'pivots':      return typeof PivotsTab      !== 'undefined' ? <PivotsTab/>      : <Placeholder name="Pivot Tables"/>;
+      case 'cases':       return typeof CasesTab       !== 'undefined' ? <CasesTab/>       : <Placeholder name="Real Cases"/>;
       case 'cheatsheet':  return typeof CheatSheetTab  !== 'undefined' ? <CheatSheetTab/>  : <Placeholder name="Cheat Sheet"/>;
       default:            return null;
     }
@@ -1276,10 +1293,10 @@ function App() {
             Excel<span style={{color:'#13d6c1'}}> Analytics</span> Lab
           </h1>
           <p style={{color:'#8b86a8',fontSize:'.93rem',maxWidth:'480px',margin:'0 auto 1.2rem',lineHeight:1.65}}>
-            Excel como herramienta analítica en entornos corporativos. Fórmulas, estadística, Power Query y tablas dinámicas — con casos reales de marketing y negocio.
+            Excel as an analytical tool in corporate environments. Formulas, statistics, Power Query, and Pivot Tables — with real marketing and business use cases.
           </p>
           <div style={{display:'flex',justifyContent:'center',gap:'.55rem',flexWrap:'wrap'}}>
-            {['7 módulos','Simulador de cohortes','Quiz interactivo','Cheat Sheet'].map(t=>(
+            {['7 modules','Cohort simulator','Interactive quiz','Cheat Sheet'].map(t=>(
               <span key={t} style={{background:'rgba(29,8,94,.5)',border:'1px solid #1e1b46',borderRadius:'20px',padding:'.22rem .7rem',fontSize:'.73rem',color:'#8b86a8'}}>{t}</span>
             ))}
           </div>
@@ -1327,12 +1344,12 @@ function Placeholder({ name }) {
   return (
     <div className="fade-up" style={{textAlign:'center',padding:'3rem 1rem',color:'#504d70'}}>
       <div style={{fontSize:'2rem',marginBottom:'.5rem'}}>⏳</div>
-      <p style={{fontFamily:'DM Mono, monospace',fontSize:'.82rem'}}>Módulo "{name}" — en construcción</p>
+      <p style={{fontFamily:'DM Mono, monospace',fontSize:'.82rem'}}>Module "{name}" — under construction</p>
     </div>
   );
 }
 
-// ✅ Renderizado correcto para React 18
+// ✅ Correct React 18 rendering
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App/>);
 </script>
